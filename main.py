@@ -14,7 +14,7 @@ ava_right3 = pygame.image.load('Ava/Ava_right3.png').convert_alpha()
 ava_right4 = pygame.image.load('Ava/Ava_right4.png').convert_alpha()
 ava_right5 = pygame.image.load('Ava/Ava_right5.png').convert_alpha()
 ava_right6 = pygame.image.load('Ava/Ava_right6.png').convert_alpha()
-#ava_idle_scaled = pygame.transform.scale(ava_idle,(16,16))
+
 ava_idle = pygame.image.load('Ava/Ava_idle_right.png')
 ava_right = [ava_right1, ava_right2, ava_right3, ava_right4, ava_right5, ava_right6]
 index = 0
