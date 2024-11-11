@@ -1,5 +1,4 @@
 import pygame
-from sprite import Spritesheet
 
 # Initialize Pygame and create window
 pygame.init()
@@ -8,6 +7,7 @@ canvas = pygame.Surface((DISPLAY_W, DISPLAY_H))
 window = pygame.display.set_mode((DISPLAY_W, DISPLAY_H))
 running = True
 
+#takes images from directory (we need to learn how to use spritesheets instead of this)
 ava_right1 = pygame.image.load('Ava/Ava_right1.png').convert_alpha()
 ava_right2 = pygame.image.load('Ava/Ava_right2.png').convert_alpha()
 ava_right3 = pygame.image.load('Ava/Ava_right3.png').convert_alpha()
@@ -39,36 +39,44 @@ ava_down6 = pygame.image.load('Ava/Ava_down6.png').convert_alpha()
 ava_idle_right = pygame.image.load('Ava/Ava_idle_right.png')
 ava_idle_left = pygame.image.load('Ava/Ava_idle_left.png')
 
+#compiles each direction into a list
 ava_right = [ava_right1, ava_right2, ava_right3, ava_right4, ava_right5, ava_right6]
 ava_left = [ava_left1, ava_left2, ava_left3, ava_left4, ava_left5, ava_left6]
 ava_up = [ava_up1, ava_up2, ava_up3, ava_up4, ava_up5, ava_up6]
 ava_down = [ava_down1, ava_down2, ava_down3, ava_down4, ava_down5, ava_down6]
 
-index = 0
-
-last_idle = ava_idle_right
+#default idle
+last_idle = ava_down2
 ava = last_idle
 
+#adjustable coordinates
 avaX = DISPLAY_W/2
 avaY = DISPLAY_H/2
 
+#ava hitbox and coordinate manager
 ava_rect = ava.get_rect(center = (avaX, avaY))
 ava.set_colorkey('White')
 
-
+#to scale later
 def Ava_size():
     global ava
     ava = pygame.transform.rotozoom(ava,0,5)
 
 
-
+#if key is pressed
+key = False
 
 def Animate():
+    
     global index, last_idle, ava
+
+    #reverts to idle if no key is pressed
     if key == False:
         ava = last_idle
         Ava_size()
         ava.set_colorkey('White')
+
+    #animates using one of the lists based on the direction
     elif direction == 'right':
         index += 0.1
         if index >= len(ava_right): index=0
@@ -98,20 +106,25 @@ def Animate():
         Ava_size()
         last_idle = ava_down2
 
+#index for iteration
 index = 0
+
+#initializes frame rate manager
 clock = pygame.time.Clock()
 
 while running:
+    #quits the game if window is closed
     for event in pygame.event.get():
         if event.type == pygame.QUIT: running = False
 
-
+    #fills screen with black so that previous frames are erased
     window.fill((0,0,0))
 
     
-
+    #places character
     window.blit(ava,(avaX,avaY))
 
+    #listens for key press
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a]:
         avaX -=10
@@ -139,10 +152,10 @@ while running:
     Animate()
 
 
-
+    #manages frame rate (60fps)
     clock.tick(60)
-    pygame.display.update()
 
-    
+    #updates the display
+    pygame.display.update()
 
 pygame.quit()
