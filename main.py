@@ -3,7 +3,7 @@ from sprite import Spritesheet
 
 # Initialize Pygame and create window
 pygame.init()
-DISPLAY_W, DISPLAY_H = 1000, 800
+DISPLAY_W, DISPLAY_H = 1700, 1200
 canvas = pygame.Surface((DISPLAY_W, DISPLAY_H))
 window = pygame.display.set_mode((DISPLAY_W, DISPLAY_H))
 running = True
@@ -54,9 +54,11 @@ avaY = DISPLAY_H/2
 
 ava_rect = ava.get_rect(center = (avaX, avaY))
 ava.set_colorkey('White')
-ava = pygame.transform.rotozoom(ava,0,7)
 
 
+def Ava_size():
+    global ava
+    ava = pygame.transform.rotozoom(ava,0,5)
 
 
 
@@ -65,7 +67,7 @@ def Animate():
     global index, last_idle, ava
     if key == False:
         ava = last_idle
-        ava = pygame.transform.rotozoom(ava,0,7)
+        Ava_size()
         ava.set_colorkey('White')
     elif direction == 'right':
         index += 0.1
@@ -73,26 +75,28 @@ def Animate():
         ava = ava_right[int(index)]
         last_idle = ava_idle_right
         ava.set_colorkey('White')
-        ava = pygame.transform.rotozoom(ava, 0, 7)
+        Ava_size()
     elif direction == 'left':
         index += 0.1
         if index >= len(ava_left): index=0
         ava = ava_left[int(index)]
         ava.set_colorkey('White')
-        ava = pygame.transform.rotozoom(ava, 0, 7)
+        Ava_size()
         last_idle = ava_idle_left
     elif direction == 'up':
         index += 0.1
         if index >= len(ava_up): index=0
         ava = ava_up[int(index)]
         ava.set_colorkey('White')
-        ava = pygame.transform.rotozoom(ava, 0, 7)
+        Ava_size()
+        last_idle = ava_up2
     elif direction == 'down':
         index += 0.1
         if index >= len(ava_down): index=0
         ava = ava_down[int(index)]
         ava.set_colorkey('White')
-        ava = pygame.transform.rotozoom(ava, 0, 7)
+        Ava_size()
+        last_idle = ava_down2
 
 index = 0
 clock = pygame.time.Clock()
@@ -142,4 +146,3 @@ while running:
     
 
 pygame.quit()
-
