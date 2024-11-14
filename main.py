@@ -1,175 +1,110 @@
-import pygame as pg
-
-# Initialize pg and create window
-pg.init()
+import pygame
+from colorama import Fore,Back,Style
+# Initialize pygame and create window
+pygame.init()
 DISPLAY_W, DISPLAY_H = 1700, 1200
-canvas = pg.Surface((DISPLAY_W, DISPLAY_H))
-window = pg.display.set_mode((DISPLAY_W, DISPLAY_H))
+canvas = pygame.Surface((DISPLAY_W, DISPLAY_H))
+window = pygame.display.set_mode((DISPLAY_W, DISPLAY_H))
 running = True
 
 #takes images from directory (we need to learn how to use spritesheets instead of this)
-ava_right1 = pg.image.load('Ava/Ava_right1.png').convert_alpha()
-ava_right2 = pg.image.load('Ava/Ava_right2.png').convert_alpha()
-ava_right3 = pg.image.load('Ava/Ava_right3.png').convert_alpha()
-ava_right4 = pg.image.load('Ava/Ava_right4.png').convert_alpha()
-ava_right5 = pg.image.load('Ava/Ava_right5.png').convert_alpha()
-ava_right6 = pg.image.load('Ava/Ava_right6.png').convert_alpha()
+def load_ava():
+    ava_right1 = pygame.image.load('Ava/Ava_right1.png').convert_alpha()
+    ava_right2 = pygame.image.load('Ava/Ava_right2.png').convert_alpha()
+    ava_right3 = pygame.image.load('Ava/Ava_right3.png').convert_alpha()
+    ava_right4 = pygame.image.load('Ava/Ava_right4.png').convert_alpha()
+    ava_right5 = pygame.image.load('Ava/Ava_right5.png').convert_alpha()
+    ava_right6 = pygame.image.load('Ava/Ava_right6.png').convert_alpha()
 
-ava_left1 = pg.image.load('Ava/Ava_left1.png').convert_alpha()
-ava_left2 = pg.image.load('Ava/Ava_left2.png').convert_alpha()
-ava_left3 = pg.image.load('Ava/Ava_left3.png').convert_alpha()
-ava_left4 = pg.image.load('Ava/Ava_left4.png').convert_alpha()
-ava_left5 = pg.image.load('Ava/Ava_left5.png').convert_alpha()
-ava_left6 = pg.image.load('Ava/Ava_left6.png').convert_alpha()
+    ava_left1 = pygame.image.load('Ava/Ava_left1.png').convert_alpha()
+    ava_left2 = pygame.image.load('Ava/Ava_left2.png').convert_alpha()
+    ava_left3 = pygame.image.load('Ava/Ava_left3.png').convert_alpha()
+    ava_left4 = pygame.image.load('Ava/Ava_left4.png').convert_alpha()
+    ava_left5 = pygame.image.load('Ava/Ava_left5.png').convert_alpha()
+    ava_left6 = pygame.image.load('Ava/Ava_left6.png').convert_alpha()
 
-ava_up1 = pg.image.load('Ava/Ava_up1.png').convert_alpha()
-ava_up2 = pg.image.load('Ava/Ava_up2.png').convert_alpha()
-ava_up3 = pg.image.load('Ava/Ava_up3.png').convert_alpha()
-ava_up4 = pg.image.load('Ava/Ava_up4.png').convert_alpha()
-ava_up5 = pg.image.load('Ava/Ava_up5.png').convert_alpha()
-ava_up6 = pg.image.load('Ava/Ava_up6.png').convert_alpha()
+    ava_up1 = pygame.image.load('Ava/Ava_up1.png').convert_alpha()
+    ava_up2 = pygame.image.load('Ava/Ava_up2.png').convert_alpha()
+    ava_up3 = pygame.image.load('Ava/Ava_up3.png').convert_alpha()
+    ava_up4 = pygame.image.load('Ava/Ava_up4.png').convert_alpha()
+    ava_up5 = pygame.image.load('Ava/Ava_up5.png').convert_alpha()
+    ava_up6 = pygame.image.load('Ava/Ava_up6.png').convert_alpha()
 
-ava_down1 = pg.image.load('Ava/Ava_down1.png').convert_alpha()
-ava_down2 = pg.image.load('Ava/Ava_down2.png').convert_alpha()
-ava_down3 = pg.image.load('Ava/Ava_down3.png').convert_alpha()
-ava_down4 = pg.image.load('Ava/Ava_down4.png').convert_alpha()
-ava_down5 = pg.image.load('Ava/Ava_down5.png').convert_alpha()
-ava_down6 = pg.image.load('Ava/Ava_down6.png').convert_alpha()
+    ava_down1 = pygame.image.load('Ava/Ava_down1.png').convert_alpha()
+    ava_down2 = pygame.image.load('Ava/Ava_down2.png').convert_alpha()
+    ava_down3 = pygame.image.load('Ava/Ava_down3.png').convert_alpha()
+    ava_down4 = pygame.image.load('Ava/Ava_down4.png').convert_alpha()
+    ava_down5 = pygame.image.load('Ava/Ava_down5.png').convert_alpha()
+    ava_down6 = pygame.image.load('Ava/Ava_down6.png').convert_alpha()
 
-ava_idle_right = pg.image.load('Ava/Ava_idle_right.png')
-ava_idle_left = pg.image.load('Ava/Ava_idle_left.png')
+    ava_idle_right = pygame.image.load('Ava/Ava_idle_right.png')
+    ava_idle_left = pygame.image.load('Ava/Ava_idle_left.png')
+
 
 #compiles each direction into a list
-ava_right = [ava_right1, ava_right2, ava_right3, ava_right4, ava_right5, ava_right6]
-ava_left = [ava_left1, ava_left2, ava_left3, ava_left4, ava_left5, ava_left6]
-ava_up = [ava_up1, ava_up2, ava_up3, ava_up4, ava_up5, ava_up6]
-ava_down = [ava_down1, ava_down2, ava_down3, ava_down4, ava_down5, ava_down6]
+    ava_right = [ava_right1, ava_right2, ava_right3, ava_right4, ava_right5, ava_right6]
+    ava_left = [ava_left1, ava_left2, ava_left3, ava_left4, ava_left5, ava_left6]
+    ava_up = [ava_up1, ava_up2, ava_up3, ava_up4, ava_up5, ava_up6]
+    ava_down = [ava_down1, ava_down2, ava_down3, ava_down4, ava_down5, ava_down6]
 
 #default idle
-last_idle = ava_down2
-ava = last_idle
+    last_idle = ava_down2
+    ava = last_idle
 
-#adjustable coordinates
-avaX = DISPLAY_W/2
-avaY = DISPLAY_H/2
+    return ava_right, ava_left, ava_up, ava_down, last_idle, ava, ava_idle_left, ava_idle_right
 
-def Offscreen_check(ifXY):
-    global avaX, avaY
-    if ifXY == 'X' or ifXY == 'XY':
-        if avaX <= -100:
-            avaX = DISPLAY_W
-        elif avaX >= DISPLAY_W + 100:
-            avaX = -90
-    if ifXY == 'Y' or ifXY == 'XY':
-        if avaY <= -10:
-            avaY = DISPLAY_W
-        elif avaY >= DISPLAY_W + 10:
-            avaY = 0
-
-
-#ava hitbox and coordinate manager
-ava_rect = ava.get_rect(center = (avaX, avaY))
-ava.set_colorkey('White')
-
-#to scale later
-def Ava_size():
-    global ava
-    ava = pg.transform.rotozoom(ava,0,5)
-
-
-#if key is pressed
-key = False
-
-def Animate():
+def get_maze(l): # converts maze txt into array
+    lister = []
+    temp_row=[]
+    txt = open(l,'r')
+    content = txt.readlines()
+    txt.close()
+    for row in content:
+        for item in row:
+            temp_row.append(item)
+        temp_row.pop(-1)
+        lister.append(temp_row)
+        temp_row = []
     
-    global index, last_idle, ava
+    return lister
 
-    #reverts to idle if no key is pressed
-    if key == False:
-        ava = last_idle
-        Ava_size()
-        ava.set_colorkey('White')
+def print_maze(maze):
+    for row in maze:
+        for item in row:
+            if item =="#":
+                print(Back.BLACK+ " ",end="")
+            elif item =="&":
+                print(Back.RED + " ",end="")
+            elif item == "A":
+                print(Back.BLUE + " ",end="")
+            else:
+                print(Back.WHITE + " ",end="")
+                
+        print(Style.RESET_ALL)
 
-    #animates using one of the lists based on the direction
-    elif direction == 'right':
-        index += 0.1
-        if index >= len(ava_right): index=0
-        ava = ava_right[int(index)]
-        last_idle = ava_idle_right
-        ava.set_colorkey('White')
-        Ava_size()
-    elif direction == 'left':
-        index += 0.1
-        if index >= len(ava_left): index=0
-        ava = ava_left[int(index)]
-        ava.set_colorkey('White')
-        Ava_size()
-        last_idle = ava_idle_left
-    elif direction == 'up':
-        index += 0.1
-        if index >= len(ava_up): index=0
-        ava = ava_up[int(index)]
-        ava.set_colorkey('White')
-        Ava_size()
-        last_idle = ava_up2
-    elif direction == 'down':
-        index += 0.1
-        if index >= len(ava_down): index=0
-        ava = ava_down[int(index)]
-        ava.set_colorkey('White')
-        Ava_size()
-        last_idle = ava_down2
 
-#index for iteration
-index = 0
 
-#initializes frame rate manager
-clock = pg.time.Clock()
+def map_import(file,width,height):     
+    map = get_maze(file)
+    final_dict = []
+    tile_width =    int( width / ( len( map[0] ) ) )
+    tile_height = int(  height / len(map)    )
 
-while running:
-    #quits the game if window is closed
-    for event in pg.event.get():
-        if event.type == pg.QUIT: running = False
-
-    #fills screen with black so that previous frames are erased
-    window.fill((0,0,0))
-
+    # converting list to a dictionary with cordinates
+    temp_dict = {}
+    for row_index,row in enumerate(map):
+        for item_index,item in enumerate(row):
+            temp_dict.update( {( (item_index * tile_width ),(row_index * tile_height)  ) : item } )
+        final_dict.append(temp_dict)
+        temp_dict = {}
     
-    #places character
-    window.blit(ava,(avaX,avaY))
+    return final_dict
 
-    #listens for key press
-    keys = pg.key.get_pressed()
-    if keys[pg.K_a]:
-        avaX -=10
-        print("left")
-        key = True
-        direction = 'left'
-    elif keys[pg.K_d]:
-        avaX +=10
-        print("right")
-        key = True
-        direction = 'right'
-    elif keys[pg.K_w]:
-        avaY -=10
-        print("up")
-        key = True
-        direction = 'up'
-    elif keys[pg.K_s]:
-        avaY +=10
-        print("down")
-        key = True
-        direction = 'down'
-    else:
-        key = False
 
-    Animate()
-    #Offscreen_check('XY')
 
-    #manages frame rate (60fps)
-    clock.tick(60)
+def map_draw(map):
+    # tileset should be a dictionary assigning each value in the txt file to a tile, e.g # --> snowtile
+    for row in map:
+        for item in row:
+            pass
 
-    #updates the display
-    pg.display.update()
-
-pg.quit()
