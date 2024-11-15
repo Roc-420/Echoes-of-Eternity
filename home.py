@@ -24,6 +24,14 @@ end_state = 0
 ava_right,ava_left, ava_up, ava_down, last_idle, ava, ava_idle_left, ava_idle_right =load_ava()
 index = 0
 
+
+def collide_check(player_rect,wall_rect_list):
+    for wall in  wall_rect_list:
+        if player_rect.colliderect(wall):
+            return True
+        
+    return False
+
 def home_screen():
     def title_screen():
         if start_state == 1:
@@ -85,7 +93,7 @@ def home_screen():
 music = pygame.mixer.Sound('music/title.mp3')
 music.play(-1)
     
-avaX = 500
+avaX = 700
 avaY = 200
 ava = last_idle
 ava_rect = ava.get_rect(center = (avaX,avaY))
@@ -96,24 +104,34 @@ ava.set_colorkey('White')
 
 def draw_map():
     tile_set = { "#": "tiles/ground2.png", "A" : "tiles/ground3.png", " " : "tiles/ground1.png" ,"S" : "tiles/Tree.png"}
+    walls = ["#"]
+    wall_rect_list = []
     default = "tiles/ground1.png"
     default = pygame.image.load(default).convert_alpha()
-    screen.fill("White")
+    screen.fill("Black")
     map = map_import('maps/map.txt',1280,720)
 
     
     for row in map:
         for item in row:
             tile = pygame.image.load(tile_set[ row[item] ]).convert_alpha()
-            screen.blit(default,item)
-            screen.blit(tile,item)
+            if row[item] == "#":
+                wally = tile.get_rect(topleft = item)
+                wall_rect_list.append(wally)
+                screen.blit(tile,wally)
+            else:
+                pass
+                
+            
+            
 
-    return map
+    return map, wall_rect_list
     
    
 def Ava_size():
     global ava
     ava = pygame.transform.rotozoom(ava,0,2)
+    print(avaX,avaY)
 
 def Animate():
     
@@ -124,6 +142,8 @@ def Animate():
         ava = last_idle
         Ava_size()
         ava.set_colorkey('White')
+
+
 
     #animates using one of the lists based on the direction
     elif direction == 'right':
@@ -159,7 +179,7 @@ def Animate():
 
 while running:
    
-    if home_state == 1:
+    if home_state == 1: # home screen state
         # generating text one word at a time
         home_screen()
         
@@ -204,34 +224,45 @@ while running:
     # loads map
 
     
-        mapy = draw_map()
+        mapy,wall_list = draw_map()
+      
+        ava_rect = ava.get_rect(center = (avaX,avaY))
+
 
 
     
     #places character
-        screen.blit(ava,(avaX,avaY))
+        screen.blit(ava,ava_rect)
 
     #listens for key press
         keys = pygame.key.get_pressed()
         
         
+    
+     
         if keys[pygame.K_a]:
             avaX -=10
+            if collide_check(ava_rect,wall_rect_list=wall_list):
+                avaX +=10
             
             key = True
             direction = 'left'
         elif keys[pygame.K_d]:
             avaX +=10
-            
+            if collide_check(ava_rect,wall_rect_list=wall_list):
+                avaX -=10
             key = True
             direction = 'right'
         elif keys[pygame.K_w]:
             avaY -=10
+            if collide_check(ava_rect,wall_rect_list=wall_list):
+                avaY +=10
             key = True
             direction = 'up'
         elif keys[pygame.K_s]:
             avaY +=10
-            
+            if collide_check(ava_rect,wall_rect_list=wall_list):
+                avaX -=10
             key = True
             direction = 'down'
         
@@ -248,3 +279,7 @@ while running:
 pygame.quit()
 
 
+#NOTES
+# AVAS TOP TRIANGLE IS TOO HIGH
+# HER LEFT AND RIGHT WORK FINE
+# BOTTOM IS TWEAKING

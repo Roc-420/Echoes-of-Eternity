@@ -99,11 +99,3 @@ def map_import(file,width,height):
         temp_dict = {}
     
     return final_dict
-
-
-
-def map_draw(map):
-    # tileset should be a dictionary assigning each value in the txt file to a tile, e.g # --> snowtile
-    for row in map:
-        for item in row:
-            pass
