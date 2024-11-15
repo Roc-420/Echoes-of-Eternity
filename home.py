@@ -256,11 +256,12 @@ while running:
         
     
         if collide_check(ava_rect,exit_list,directions="None"):
-            map_index = 1
+            map_index +=1
             avaX = 200
             avaY = 600
+            ava_rect = ava.get_rect(center = (avaX,avaY))
             screen.fill("Black")
-            pygame.time.delay(600)
+            
         elif keys[pygame.K_a]:
 
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="left"):
@@ -300,8 +301,7 @@ while running:
 
         Animate()
 
-    if home_state == 3: # this is the battle state, right the combat code here
-        pass
+
     pygame.display.flip()
 
     clock.tick(60)  # limits FPS to 60
