@@ -12,7 +12,7 @@ test_font = pygame.font.Font('font/Pixeltype.ttf',155)
 test_font_1 = pygame.font.Font('font/Pixeltype.ttf',139)
 
 text_timer = 0
-map_list = ["maps/map.txt","maps/map2.txt"]
+map_list = ["maps/map3.txt","maps/map2.txt"]
 map_index = 0
 
 
@@ -114,13 +114,19 @@ ava.set_colorkey('White')
 
 
 def draw_map():
-    tile_set = { "#": "tiles/ground2.png", "A" : "tiles/ground3.png", " " : "tiles/ground1.png" ,"S" : "tiles/Tree.png"}
-    walls = ["#"]
+    global map_list
+    global map_index
+    tile_set = {  "@": "tiles/ground3.png", " " : "tiles/ground1.png", "$": "tiles/water.png", "E" : "tiles/ground2.png", "#" : "tiles/ground2.png"} 
+
+    walls = ["$", "@",]
+    exits = ['E']
     wall_rect_list = []
+    exit_rect_list = []
     default = "tiles/ground1.png"
     default = pygame.image.load(default).convert_alpha()
     screen.fill("Black")
-    map = map_import('maps/map.txt',1280,720)
+    print(map_index)
+    map = map_import(map_list[map_index],1280,720)
 
     
     for row in map:
@@ -128,9 +134,12 @@ def draw_map():
             tile = pygame.image.load(tile_set[ row[item] ]).convert_alpha()
             wally = tile.get_rect(topleft = item)
             screen.blit(tile,wally)
-            if row[item] == "#":
+            if row[item] in walls:
                 wall_rect_list.append(wally)
-    return map, wall_rect_list
+            elif row[item] in exits:
+                exit_rect_list.append(wally)
+    return map, wall_rect_list, exit_rect_list
+
     
    
 def Ava_size():
@@ -180,11 +189,11 @@ def Animate():
         Ava_size()
         last_idle = ava_down[1]
 
-
+max_speed = 15
 
 while running:
    
-    if home_state == 1: # home screen state
+    if home_state == 1: # home screen state, 
         # generating text one word at a time
         home_screen()
         
@@ -223,7 +232,7 @@ while running:
                     else:
                         pygame.quit()
 
-    if home_state == 0:
+    if home_state == 0: # overwold state, map exploration  here
         for event in pygame.event.get():
             if event.type == pygame.QUIT: 
                 running = False
@@ -231,8 +240,8 @@ while running:
     # loads map
 
     
-        mapy,wall_list = draw_map()
-      
+        mapy,wall_list,exit_list = draw_map()
+      # gets ava cords
         ava_rect = ava.get_rect(center = (avaX,avaY))
 
 
@@ -246,9 +255,14 @@ while running:
         
         
     
-     
-        if keys[pygame.K_a]:
-            
+        if collide_check(ava_rect,exit_list,directions="None"):
+            map_index = 1
+            avaX = 200
+            avaY = 600
+            screen.fill("Black")
+            pygame.time.delay(600)
+        elif keys[pygame.K_a]:
+
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="left"):
                 pass
             else:
@@ -286,7 +300,8 @@ while running:
 
         Animate()
 
-
+    if home_state == 3: # this is the battle state, right the combat code here
+        pass
     pygame.display.flip()
 
     clock.tick(60)  # limits FPS to 60
@@ -298,3 +313,4 @@ pygame.quit()
 # AVAS TOP TRIANGLE IS TOO HIGH
 # HER LEFT AND RIGHT WORK FINE
 # BOTTOM IS TWEAKING
+
