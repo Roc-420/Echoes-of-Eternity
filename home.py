@@ -16,6 +16,7 @@ map_list = ["maps/map.txt","maps/map2.txt"]
 map_index = 0
 
 
+
 # home screen status variables
 home_screen_text = 0 # stops generation if text = 0
 home_state = 1
@@ -126,18 +127,9 @@ def draw_map():
         for item in row:
             tile = pygame.image.load(tile_set[ row[item] ]).convert_alpha()
             wally = tile.get_rect(topleft = item)
-           
+            screen.blit(tile,wally)
             if row[item] == "#":
-                
                 wall_rect_list.append(wally)
-                
-                screen.blit(tile,wally)
-            
-            
-            
-            
-            
-
     return map, wall_rect_list
     
    
@@ -226,6 +218,8 @@ while running:
                     if start_state == 1:
 
                         home_state = 0
+                    
+                        
                     else:
                         pygame.quit()
 
