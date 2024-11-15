@@ -25,7 +25,17 @@ ava_right,ava_left, ava_up, ava_down, last_idle, ava, ava_idle_left, ava_idle_ri
 index = 0
 
 
-def collide_check(player_rect,wall_rect_list):
+def collide_check(player_rect,wall_rect_list,directions):
+    if directions == "right":
+        player_rect.x +=10
+    elif directions == "left":
+        player_rect.x -=10
+    elif directions == "up":
+        player_rect.y -=10
+    elif directions == "down":
+        player_rect.y +=10
+    else:
+        pass
     for wall in  wall_rect_list:
         if player_rect.colliderect(wall):
             return True
@@ -115,13 +125,16 @@ def draw_map():
     for row in map:
         for item in row:
             tile = pygame.image.load(tile_set[ row[item] ]).convert_alpha()
+            wally = tile.get_rect(topleft = item)
+           
             if row[item] == "#":
-                wally = tile.get_rect(topleft = item)
-                wall_rect_list.append(wally)
-                screen.blit(tile,wally)
-            else:
-                pass
                 
+                wall_rect_list.append(wally)
+                
+                screen.blit(tile,wally)
+            
+            
+            
             
             
 
@@ -241,28 +254,36 @@ while running:
     
      
         if keys[pygame.K_a]:
-            avaX -=10
-            if collide_check(ava_rect,wall_rect_list=wall_list):
-                avaX +=10
             
-            key = True
+            if collide_check(ava_rect,wall_rect_list=wall_list,directions="left"):
+                pass
+            else:
+                avaX -=10
+            
+            key = True 
             direction = 'left'
         elif keys[pygame.K_d]:
-            avaX +=10
-            if collide_check(ava_rect,wall_rect_list=wall_list):
-                avaX -=10
+           
+            if collide_check(ava_rect,wall_rect_list=wall_list,directions="right"):
+                pass
+            else:
+                avaX +=10
             key = True
             direction = 'right'
         elif keys[pygame.K_w]:
-            avaY -=10
-            if collide_check(ava_rect,wall_rect_list=wall_list):
-                avaY +=10
+        
+            if collide_check(ava_rect,wall_rect_list=wall_list,directions="up"):
+                pass
+            else:
+                avaY -=10
             key = True
             direction = 'up'
         elif keys[pygame.K_s]:
-            avaY +=10
-            if collide_check(ava_rect,wall_rect_list=wall_list):
-                avaX -=10
+          
+            if collide_check(ava_rect,wall_rect_list=wall_list,directions="down"):
+                pass
+            else:
+                avaY +=10
             key = True
             direction = 'down'
         
