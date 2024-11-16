@@ -115,9 +115,12 @@ class tile_set_1:
     snow = pygame.image.load("tiles/ground1.png").convert_alpha()
     water = pygame.image.load("tiles/water.png").convert_alpha()
     cobble_stone = pygame.image.load("tiles/ground2.png").convert_alpha()
-    tile_dict = {"@": ice, " " : snow, "$" : water, "E": cobble_stone, "#": cobble_stone}
+    tile_dict = {"@": ice, " " : snow, "$" : water, "E": cobble_stone, "#": cobble_stone, "A" :cobble_stone}
+    default = snow
     walls = ["$","@"]
     exits = ["E"]
+    entrance = ['A']
+    
 
 
 def draw_map():
@@ -127,11 +130,11 @@ def draw_map():
     tile_set = tile_set_1.tile_dict
     walls = tile_set_1.walls
     exits = tile_set_1.exits
+    entrance = tile_set_1.entrance
     wall_rect_list = []
     exit_rect_list = []
-    default = "tiles/ground1.png"
-    default = pygame.image.load(default).convert_alpha()
-    screen.fill("Black")
+    entrance_rect_list = []
+    default = tile_set_1.default
     print(map_index)
     map = map_import(map_list[map_index],1280,720)
 
@@ -140,12 +143,15 @@ def draw_map():
         for item in row:
             tile = tile_set[ row[item] ]
             wally = tile.get_rect(topleft = item)
+            screen.blit(default,wally)
             screen.blit(tile,wally)
             if row[item] in walls:
                 wall_rect_list.append(wally)
             elif row[item] in exits:
                 exit_rect_list.append(wally)
-    return map, wall_rect_list, exit_rect_list
+            elif row[item] in entrance:
+                entrance_rect_list.append(wally)
+    return map, wall_rect_list, exit_rect_list, entrance_rect_list
 
     
    
@@ -247,7 +253,7 @@ while running:
     # loads map
 
     
-        mapy,wall_list,exit_list = draw_map()
+        mapy,wall_list,exit_list,entrance_list = draw_map()
       # gets ava cords
         ava_rect = ava.get_rect(center = (avaX,avaY))
 
@@ -264,6 +270,12 @@ while running:
     
         if collide_check(ava_rect,exit_list,directions="None"):
             map_index +=1
+            avaX = 200
+            avaY = 600
+            ava_rect = ava.get_rect(center = (avaX,avaY))
+            screen.fill("Black")
+        if collide_check(ava_rect,entrance_list,directions="None"):
+            map_index -=1
             avaX = 200
             avaY = 600
             ava_rect = ava.get_rect(center = (avaX,avaY))
