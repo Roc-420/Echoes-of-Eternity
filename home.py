@@ -40,7 +40,7 @@ def collide_check(player_rect,wall_rect_list,directions):
         pass
     for wall in  wall_rect_list:
         if player_rect.colliderect(wall):
-            return True
+            return wall
         
     return False
 
@@ -156,7 +156,6 @@ def draw_map():
     entrance_rect_list = []
     special_list = []
     default = tile_set_1.default
-    print(map_index)
     map = map_import(map_list[map_index],1280,720)
 
     
@@ -176,14 +175,14 @@ def draw_map():
         screen.blit(image,rect)
         special_list.append(rect)
         wall_rect_list.append(rect)
-    return map, wall_rect_list, exit_rect_list, entrance_rect_list
+   
+    return map, wall_rect_list, exit_rect_list, entrance_rect_list, special_list
 
     
    
 def Ava_size():
     global ava
     ava = pygame.transform.rotozoom(ava,0,2)
-    print(avaX,avaY)
 
 def Animate():
     
@@ -273,6 +272,7 @@ while running:
                         pygame.quit()
 
     if home_state == 0: # overwold state, map exploration  here
+        print(home_state)
         for event in pygame.event.get():
             if event.type == pygame.QUIT: 
                 running = False
@@ -280,7 +280,7 @@ while running:
     # loads map
 
     
-        mapy,wall_list,exit_list,entrance_list = draw_map()
+        mapy,wall_list,exit_list,entrance_list,special_lists = draw_map()
       # gets ava cords
         ava_rect = ava.get_rect(center = (avaX,avaY))
 
@@ -294,7 +294,6 @@ while running:
 
     #listens for key press
         keys = pygame.key.get_pressed()
-        
         
 
         if collide_check(ava_rect,exit_list,directions="None"):      
@@ -321,8 +320,10 @@ while running:
             x,y = int(x),int(y)
             avaX,avaY, x,y
             ava_rect = ava.get_rect(center = (avaX,avaY))
+        
+       
         elif keys[pygame.K_a]:
-
+            
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="left"):
                 pass
             else:
@@ -339,11 +340,14 @@ while running:
             key = True
             direction = 'right'
         elif keys[pygame.K_w]:
-        
+
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="up"):
                 pass
             else:
                 avaY -=2
+            if collide_check(ava_rect,wall_rect_list=wall_list,directions="up") in special_lists and keys[pygame.K_SPACE]:
+                home_state = "dialogue"
+            
             key = True
             direction = 'up'
         elif keys[pygame.K_s]:
@@ -368,7 +372,7 @@ while running:
             trans_timer = 0
           
     if home_state == "dialogue":
-        pass
+        print("dialogue!!!")
     pygame.display.flip()
 
     clock.tick(60)  # limits FPS to 60
