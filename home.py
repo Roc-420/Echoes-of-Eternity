@@ -127,7 +127,7 @@ class Music_list:
     playlist = [over_world_1,over_world_1]
     
 class special_sprite_set:
-    
+    # map 1 assets
     tree = pygame.image.load("special_sprite/Tree.png")
     tree = pygame.transform.rotozoom(tree,0,2)
     tree_rect = tree.get_rect(center = (700,500))
@@ -139,6 +139,16 @@ class special_sprite_set:
 
     final_image_list = [ image_list_1, [] ]
     final_rect_list = [  rect_list_1, []   ]
+    #--------------------------------------------------------------------------------------------------
+
+class dialogue:
+    # map 1 dialogue
+    a0 = "Very long treee"
+    a1 = "worn down cabin"
+    list_a = [a0,a1]
+    #----------------------------------------------------------------------------
+    final_list = [list_a]
+
 
 Music_list.title.play(-1)
 
@@ -347,6 +357,7 @@ while running:
                 avaY -=2
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="up") in special_lists and keys[pygame.K_SPACE]:
                 home_state = "dialogue"
+                dialogue_option = special_lists.index(collide_check(ava_rect,wall_rect_list=wall_list,directions="up"))
             
             key = True
             direction = 'up'
@@ -372,7 +383,7 @@ while running:
             trans_timer = 0
           
     if home_state == "dialogue":
-        print("dialogue!!!")
+        print(dialogue.final_list[map_index][dialogue_option])
     pygame.display.flip()
 
     clock.tick(60)  # limits FPS to 60
