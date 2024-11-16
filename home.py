@@ -10,6 +10,7 @@ clock = pygame.time.Clock()
 running = True
 test_font = pygame.font.Font('font/Pixeltype.ttf',155)
 test_font_1 = pygame.font.Font('font/Pixeltype.ttf',139)
+other_text_font = pygame.font.Font('font/Pixeltype.ttf',50)
 
 text_timer = 0
 map_list = ["maps/map3.txt","maps/map2.txt"]
@@ -28,13 +29,13 @@ trans_timer  = 0
 
 def collide_check(player_rect,wall_rect_list,directions):
     if directions == "right":
-        player_rect.x +=10
+        player_rect.x +=5
     elif directions == "left":
-        player_rect.x -=10
+        player_rect.x -=5
     elif directions == "up":
-        player_rect.y -=10
+        player_rect.y -=5
     elif directions == "down":
-        player_rect.y +=10
+        player_rect.y +=5
     else:
         pass
     for wall in  wall_rect_list:
@@ -105,6 +106,7 @@ def home_screen():
 avaX = 700
 avaY = 200
 ava = last_idle
+ava_start_list = ["700,700","900,700"]
 ava_rect = ava.get_rect(center = (avaX,avaY))
 ava.set_colorkey('White') 
 
@@ -123,10 +125,23 @@ class Music_list:
     title = pygame.mixer.Sound('music/title.mp3')
     over_world_1 = pygame.mixer.Sound("music/lost_woods.mp3")
     playlist = [over_world_1,over_world_1]
+    
+class special_sprite_set:
+    
+    tree = pygame.image.load("special_sprite/Tree.png")
+    tree = pygame.transform.rotozoom(tree,0,2)
+    tree_rect = tree.get_rect(center = (700,500))
+    cabin = pygame.image.load("special_sprite/Cabin.png")
+    cabin = pygame.transform.rotozoom(cabin,0,2)
+    cabin_rect = cabin.get_rect( center =  (1000,300))   
+    image_list_1 = [tree,cabin]
+    rect_list_1 = [tree_rect,cabin_rect]
 
-
+    final_image_list = [ image_list_1, [] ]
+    final_rect_list = [  rect_list_1, []   ]
 
 Music_list.title.play(-1)
+
 
 def draw_map():
     global map_list
@@ -139,6 +154,7 @@ def draw_map():
     wall_rect_list = []
     exit_rect_list = []
     entrance_rect_list = []
+    special_list = []
     default = tile_set_1.default
     print(map_index)
     map = map_import(map_list[map_index],1280,720)
@@ -156,6 +172,10 @@ def draw_map():
                 exit_rect_list.append(wally)
             elif row[item] in entrance:
                 entrance_rect_list.append(wally)
+    for image,rect in zip(special_sprite_set.final_image_list[map_index],special_sprite_set.final_rect_list[map_index]):
+        screen.blit(image,rect)
+        special_list.append(rect)
+        wall_rect_list.append(rect)
     return map, wall_rect_list, exit_rect_list, entrance_rect_list
 
     
@@ -297,15 +317,16 @@ while running:
             home_state = "trans"
             scroll = pygame.mixer.Sound('music/map_transfer.mp3')
             scroll.play(0)
-            avaX = 200
-            avaY = 600
+            x,y = ava_start_list[map_index].split(",")
+            x,y = int(x),int(y)
+            avaX,avaY, x,y
             ava_rect = ava.get_rect(center = (avaX,avaY))
         elif keys[pygame.K_a]:
 
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="left"):
                 pass
             else:
-                avaX -=4
+                avaX -=2
             
             key = True 
             direction = 'left'
@@ -314,7 +335,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="right"):
                 pass
             else:
-                avaX +=4
+                avaX +=2
             key = True
             direction = 'right'
         elif keys[pygame.K_w]:
@@ -322,7 +343,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="up"):
                 pass
             else:
-                avaY -=4
+                avaY -=2
             key = True
             direction = 'up'
         elif keys[pygame.K_s]:
@@ -330,7 +351,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="down"):
                 pass
             else:
-                avaY +=4
+                avaY +=2
             key = True
             direction = 'down'
         
@@ -346,6 +367,8 @@ while running:
             home_state = 0
             trans_timer = 0
           
+    if home_state == "dialogue":
+        pass
     pygame.display.flip()
 
     clock.tick(60)  # limits FPS to 60
