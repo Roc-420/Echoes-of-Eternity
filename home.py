@@ -24,7 +24,7 @@ start_state = 1
 end_state = 0
 ava_right,ava_left, ava_up, ava_down, last_idle, ava, ava_idle_left, ava_idle_right =load_ava()
 index = 0
-
+trans_timer  = 0
 
 def collide_check(player_rect,wall_rect_list,directions):
     if directions == "right":
@@ -269,17 +269,27 @@ while running:
         
     
         if collide_check(ava_rect,exit_list,directions="None"):
+            home_state = "trans"
+            print("screen filled black")
+            scroll = pygame.mixer.Sound('music/map_transfer.mp3')
+            scroll.play(0)
+            
+            
             map_index +=1
             avaX = 200
             avaY = 600
             ava_rect = ava.get_rect(center = (avaX,avaY))
             screen.fill("Black")
         if collide_check(ava_rect,entrance_list,directions="None"):
+            home_state = "trans"
+            scroll = pygame.mixer.Sound('music/map_transfer.mp3')
+            scroll.play(0)
+          
             map_index -=1
             avaX = 200
             avaY = 600
             ava_rect = ava.get_rect(center = (avaX,avaY))
-            screen.fill("Black")
+            
             
         elif keys[pygame.K_a]:
 
@@ -320,7 +330,12 @@ while running:
 
         Animate()
 
-
+    if home_state == "trans":
+        screen.fill("Black")
+        trans_timer += 0.1
+        if int(trans_timer) == 1:
+            home_state = 0
+            trans_timer = 0
     pygame.display.flip()
 
     clock.tick(60)  # limits FPS to 60
