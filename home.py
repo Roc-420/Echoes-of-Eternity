@@ -147,7 +147,7 @@ class dialogue:
     a1 = "worn down cabin"
     list_a = [a0,a1]
     #----------------------------------------------------------------------------
-    final_list = [list_a]
+    final_list = [list_a,[]]
 
 
 Music_list.title.play(-1)
@@ -357,7 +357,9 @@ while running:
                 avaY -=2
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="up") in special_lists and keys[pygame.K_SPACE]:
                 home_state = "dialogue"
+                dialogue_timer = 0
                 dialogue_option = special_lists.index(collide_check(ava_rect,wall_rect_list=wall_list,directions="up"))
+                dialogue_str = dialogue.final_list[map_index][dialogue_option]
             
             key = True
             direction = 'up'
@@ -383,12 +385,19 @@ while running:
             trans_timer = 0
           
     if home_state == "dialogue":
-        print(dialogue.final_list[map_index][dialogue_option])
+        if keys[pygame.K_SPACE]:
+            home_state  = 0
+        dialogue_pygame = other_text_font.render(dialogue_str,False,"Black")
+        screen.blit(dialogue_pygame,(600,50))
+        print(dialogue)
+
     pygame.display.flip()
 
     clock.tick(60)  # limits FPS to 60
 
 pygame.quit()
+
+
 
 
 #NOTES
