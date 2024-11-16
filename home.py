@@ -110,16 +110,23 @@ ava = last_idle
 ava_rect = ava.get_rect(center = (avaX,avaY))
 ava.set_colorkey('White') 
 
-
+class tile_set_1:
+    ice = pygame.image.load("tiles/ground3.png").convert_alpha()
+    snow = pygame.image.load("tiles/ground1.png").convert_alpha()
+    water = pygame.image.load("tiles/water.png").convert_alpha()
+    cobble_stone = pygame.image.load("tiles/ground2.png").convert_alpha()
+    tile_dict = {"@": ice, " " : snow, "$" : water, "E": cobble_stone, "#": cobble_stone}
+    walls = ["$","@"]
+    exits = ["E"]
 
 
 def draw_map():
     global map_list
     global map_index
-    tile_set = {  "@": "tiles/ground3.png", " " : "tiles/ground1.png", "$": "tiles/water.png", "E" : "tiles/ground2.png", "#" : "tiles/ground2.png"} 
-
-    walls = ["$", "@",]
-    exits = ['E']
+    global tile_set_1
+    tile_set = tile_set_1.tile_dict
+    walls = tile_set_1.walls
+    exits = tile_set_1.exits
     wall_rect_list = []
     exit_rect_list = []
     default = "tiles/ground1.png"
@@ -131,7 +138,7 @@ def draw_map():
     
     for row in map:
         for item in row:
-            tile = pygame.image.load(tile_set[ row[item] ]).convert_alpha()
+            tile = tile_set[ row[item] ]
             wally = tile.get_rect(topleft = item)
             screen.blit(tile,wally)
             if row[item] in walls:
@@ -267,7 +274,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="left"):
                 pass
             else:
-                avaX -=10
+                avaX -=4
             
             key = True 
             direction = 'left'
@@ -276,7 +283,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="right"):
                 pass
             else:
-                avaX +=10
+                avaX +=4
             key = True
             direction = 'right'
         elif keys[pygame.K_w]:
@@ -284,7 +291,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="up"):
                 pass
             else:
-                avaY -=10
+                avaY -=4
             key = True
             direction = 'up'
         elif keys[pygame.K_s]:
@@ -292,7 +299,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="down"):
                 pass
             else:
-                avaY +=10
+                avaY +=4
             key = True
             direction = 'down'
         
