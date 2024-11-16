@@ -101,9 +101,7 @@ def home_screen():
 
     
 #pygame.display.toggle_fullscreen()
-music = pygame.mixer.Sound('music/title.mp3')
-music.play(-1)
-    
+
 avaX = 700
 avaY = 200
 ava = last_idle
@@ -121,7 +119,14 @@ class tile_set_1:
     exits = ["E"]
     entrance = ['A']
     
+class Music_list:
+    title = pygame.mixer.Sound('music/title.mp3')
+    over_world_1 = pygame.mixer.Sound("music/lost_woods.mp3")
+    playlist = [over_world_1,over_world_1]
 
+
+
+Music_list.title.play(-1)
 
 def draw_map():
     global map_list
@@ -240,6 +245,8 @@ while running:
                     if start_state == 1:
 
                         home_state = 0
+                        Music_list.title.stop()
+                        Music_list.playlist[map_index].play(-1)
                     
                         
                     else:
@@ -257,6 +264,8 @@ while running:
       # gets ava cords
         ava_rect = ava.get_rect(center = (avaX,avaY))
 
+        
+
 
 
     
@@ -267,30 +276,30 @@ while running:
         keys = pygame.key.get_pressed()
         
         
+
+        if collide_check(ava_rect,exit_list,directions="None"):      
+            if   Music_list.playlist[map_index] !=  Music_list.playlist[map_index + 1]:
+                Music_list.playlist[map_index].stop()
+                map_index +=1
+                Music_list.playlist[map_index].play(-1)
+            else:
+                map_index +=1
+            
     
-        if collide_check(ava_rect,exit_list,directions="None"):
-            home_state = "trans"
-            print("screen filled black")
-            scroll = pygame.mixer.Sound('music/map_transfer.mp3')
-            scroll.play(0)
-            
-            
-            map_index +=1
-            avaX = 200
-            avaY = 600
-            ava_rect = ava.get_rect(center = (avaX,avaY))
-            screen.fill("Black")
-        if collide_check(ava_rect,entrance_list,directions="None"):
+        if collide_check(ava_rect,entrance_list,directions="None"):      
+            if   Music_list.playlist[map_index] !=  Music_list.playlist[map_index - 1]:
+                Music_list.playlist[map_index].stop()
+                map_index -=1
+                Music_list.playlist[map_index].play(-1)
+            else:    
+                map_index -=1
+        if collide_check(ava_rect,exit_list,directions="None") or collide_check(ava_rect,entrance_list,directions="None"):
             home_state = "trans"
             scroll = pygame.mixer.Sound('music/map_transfer.mp3')
             scroll.play(0)
-          
-            map_index -=1
             avaX = 200
             avaY = 600
             ava_rect = ava.get_rect(center = (avaX,avaY))
-            
-            
         elif keys[pygame.K_a]:
 
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="left"):
@@ -336,6 +345,7 @@ while running:
         if int(trans_timer) == 1:
             home_state = 0
             trans_timer = 0
+          
     pygame.display.flip()
 
     clock.tick(60)  # limits FPS to 60
