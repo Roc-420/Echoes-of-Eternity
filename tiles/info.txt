@@ -1,0 +1,6 @@
+
+
+add tiles here
+
+
+create a new folder of tiles for each area( only 1 for now

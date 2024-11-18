@@ -10,10 +10,10 @@ clock = pygame.time.Clock()
 running = True
 test_font = pygame.font.Font('font/Pixeltype.ttf',155)
 test_font_1 = pygame.font.Font('font/Pixeltype.ttf',139)
-other_text_font = pygame.font.Font('font/Pixeltype.ttf',50)
+other_text_font = pygame.font.Font('font/Pixeltype.ttf',34)
 
 text_timer = 0
-map_list = ["maps/map3.txt","maps/map2.txt"]
+map_list = ["maps/map.txt","maps/map3.txt"]
 map_index = 0
 
 
@@ -70,7 +70,6 @@ def home_screen():
     def text_generator(texts,pos):
         global text_timer
         global home_screen_text
-        sound_effect = pygame.mixer.Sound('music/text_type.wav')
         
 
 
@@ -103,10 +102,10 @@ def home_screen():
     
 #pygame.display.toggle_fullscreen()
 
-avaX = 700
-avaY = 200
+avaX = 400
+avaY = 600
 ava = last_idle
-ava_start_list = ["700,700","900,700"]
+ava_start_list = ["400,600","750,630"]
 ava_rect = ava.get_rect(center = (avaX,avaY))
 ava.set_colorkey('White') 
 
@@ -115,13 +114,15 @@ class tile_set_1:
     snow = pygame.image.load("tiles/ground1.png").convert_alpha()
     water = pygame.image.load("tiles/water.png").convert_alpha()
     cobble_stone = pygame.image.load("tiles/ground2.png").convert_alpha()
-    tile_dict = {"@": ice, " " : snow, "$" : water, "E": cobble_stone, "#": cobble_stone, "A" :cobble_stone}
+    plank = pygame.image.load("tiles/plank.png").convert_alpha()
+    tile_dict = {"@": ice, " " : snow, "$" : water, "E": cobble_stone, "#": cobble_stone, "A" :cobble_stone, "L": plank, "D" : plank,'%':plank}
     default = snow
     walls = ["$","@"]
-    exits = ["E"]
-    entrance = ['A']
+    exits = ["E","L"]
+    entrance = ['A','D']
     
 class Music_list:
+    scroll_sound = pygame.mixer.Sound('music/text_type.wav')
     title = pygame.mixer.Sound('music/title.mp3')
     over_world_1 = pygame.mixer.Sound("music/lost_woods.mp3")
     playlist = [over_world_1,over_world_1]
@@ -143,8 +144,8 @@ class special_sprite_set:
 
 class dialogue:
     # map 1 dialogue
-    a0 = "Very long treee"
-    a1 = "worn down cabin"
+    a0 = "A very long tree blocking the sun"
+    a1 = "A worn down cabin, with numerous repairs and patches, with materials no longer found upon this planet or any other "
     list_a = [a0,a1]
     #----------------------------------------------------------------------------
     final_list = [list_a,[]]
@@ -282,7 +283,7 @@ while running:
                         pygame.quit()
 
     if home_state == 0: # overwold state, map exploration  here
-        print(home_state)
+        print(map_index,avaX,avaY)
         for event in pygame.event.get():
             if event.type == pygame.QUIT: 
                 running = False
@@ -328,7 +329,7 @@ while running:
             scroll.play(0)
             x,y = ava_start_list[map_index].split(",")
             x,y = int(x),int(y)
-            avaX,avaY, x,y
+            avaX,avaY = x,y
             ava_rect = ava.get_rect(center = (avaX,avaY))
         
        
@@ -385,18 +386,42 @@ while running:
             trans_timer = 0
           
     if home_state == "dialogue":
-        if keys[pygame.K_SPACE]:
-            home_state  = 0
-        dialogue_pygame = other_text_font.render(dialogue_str,False,"Black")
-        screen.blit(dialogue_pygame,(600,50))
-        print(dialogue)
+        
+        for event in pygame.event.get():
+            print("in event loop")
+
+            if event.type == pygame.KEYDOWN  :
+                        
+                if event.key == pygame.K_SPACE:
+                    pygame.time.wait(30)
+                    home_state = 0
+
+      
+        if int(dialogue_timer) == len(dialogue_str) +1:
+            pass
+
+        else:
+            temp_text = dialogue_str[: int(dialogue_timer)]
+            dialogue_game = other_text_font.render(temp_text,False,"White")
+            dialogue_rect = dialogue_game.get_rect(midbottom = (640,40))
+            background_rect = dialogue_rect.inflate(30,20)
+            
+            pygame.draw.rect(screen,"Black",background_rect)
+            
+            screen.blit(dialogue_game,dialogue_rect)
+            Music_list.scroll_sound.play(0)
+
+            dialogue_timer +=0.2
+            
+            pygame.draw.rect(screen,"Black",background_rect)
+            screen.blit(dialogue_game,dialogue_rect)
+
 
     pygame.display.flip()
 
     clock.tick(60)  # limits FPS to 60
 
 pygame.quit()
-
 
 
 
