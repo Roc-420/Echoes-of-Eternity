@@ -12,8 +12,11 @@ test_font = pygame.font.Font('font/Pixeltype.ttf',155)
 test_font_1 = pygame.font.Font('font/Pixeltype.ttf',139)
 other_text_font = pygame.font.Font('font/Pixeltype.ttf',34)
 
+
+
+from random import randrange
 text_timer = 0
-map_list = ["maps/map.txt","maps/map3.txt"]
+map_list = ["maps/map.txt","maps/map3.txt","maps/map4.txt"]
 map_index = 0
 
 
@@ -100,12 +103,11 @@ def home_screen():
     
 
     
-#pygame.display.toggle_fullscreen()
-
+pygame.display.toggle_fullscreen()
 avaX = 400
 avaY = 600
 ava = last_idle
-ava_start_list = ["400,600","750,630"]
+ava_start_list = ["400,600","750,630","545,600"]
 ava_rect = ava.get_rect(center = (avaX,avaY))
 ava.set_colorkey('White') 
 
@@ -115,9 +117,12 @@ class tile_set_1:
     water = pygame.image.load("tiles/water.png").convert_alpha()
     cobble_stone = pygame.image.load("tiles/ground2.png").convert_alpha()
     plank = pygame.image.load("tiles/plank.png").convert_alpha()
-    tile_dict = {"@": ice, " " : snow, "$" : water, "E": cobble_stone, "#": cobble_stone, "A" :cobble_stone, "L": plank, "D" : plank,'%':plank}
+    forest_1 = pygame.image.load("tiles./F1.png").convert_alpha()
+    forest_2 = pygame.image.load("tiles/F2.png").convert_alpha()
+    tile_dict = {"@": ice, " " : snow, "$" : water, "E": cobble_stone, "#": cobble_stone, "A" :cobble_stone, "L": plank, "D" : plank,'%':plank
+    ,"F": forest_1,"f":forest_2 }
     default = snow
-    walls = ["$","@"]
+    walls = ["$","@","F","f"]
     exits = ["E","L"]
     entrance = ['A','D']
     
@@ -125,7 +130,7 @@ class Music_list:
     scroll_sound = pygame.mixer.Sound('music/text_type.wav')
     title = pygame.mixer.Sound('music/title.mp3')
     over_world_1 = pygame.mixer.Sound("music/lost_woods.mp3")
-    playlist = [over_world_1,over_world_1]
+    playlist = [over_world_1,over_world_1,over_world_1]
     
 class special_sprite_set:
     # map 1 assets
@@ -138,8 +143,8 @@ class special_sprite_set:
     image_list_1 = [tree,cabin]
     rect_list_1 = [tree_rect,cabin_rect]
 
-    final_image_list = [ image_list_1, [] ]
-    final_rect_list = [  rect_list_1, []   ]
+    final_image_list = [ image_list_1, [],[] ]
+    final_rect_list = [  rect_list_1, [],[]   ]
     #--------------------------------------------------------------------------------------------------
 
 class dialogue:
@@ -238,8 +243,16 @@ def Animate():
         last_idle = ava_down[1]
 
 max_speed = 15
-
+battle_opt = 0
 while running:
+    #battle_opt +=0.01
+    if int(battle_opt) >= 5:
+        battle_opt = 0
+        choice = randrange(0,2)
+        if choice == 0:
+            pass
+        else:
+            home_state = "combat"
    
     if home_state == 1: # home screen state, 
         # generating text one word at a time
@@ -416,7 +429,12 @@ while running:
             pygame.draw.rect(screen,"Black",background_rect)
             screen.blit(dialogue_game,dialogue_rect)
 
-
+    if home_state == "combat":
+        screen.fill("Pink")
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    home_state = 0
     pygame.display.flip()
 
     clock.tick(60)  # limits FPS to 60
