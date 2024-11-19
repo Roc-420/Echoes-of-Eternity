@@ -3,9 +3,25 @@
 
 
 
-g = "700,300"
+def str_split(str,splitter):
+    str_list  = []
+    temp_str = ""
+    timer = 0
+    # appends the rest into a list
+    for char in str:
+        timer +=1
+        temp_str = temp_str + char
+        if len(temp_str) == splitter:
+            str_list.append(temp_str)
+            temp_str = ""
+            
 
-x,y = (g.split(","))
-x,y = int(x), int(y)
+    if len(temp_str) > 0:
+        str_list.append(temp_str)
 
-print(x + y)
+
+
+
+    return str_list
+
+

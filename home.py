@@ -2,7 +2,7 @@
 import pygame
 import time
 from main import load_ava,map_import
-
+from colorama import Back,Style,Fore
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
@@ -11,12 +11,34 @@ running = True
 test_font = pygame.font.Font('font/Pixeltype.ttf',155)
 test_font_1 = pygame.font.Font('font/Pixeltype.ttf',139)
 other_text_font = pygame.font.Font('font/Pixeltype.ttf',34)
+text_box_timer = 0
 
+
+def str_split(str,splitter):
+    str_list  = []
+    temp_str = ""
+    timer = 0
+    # appends the rest into a list
+    for char in str:
+        timer +=1
+        temp_str = temp_str + char
+        if len(temp_str) == splitter:
+            str_list.append(temp_str)
+            temp_str = ""
+            
+
+    if len(temp_str) > 0:
+        str_list.append(temp_str)
+
+
+
+
+    return str_list
 
 
 from random import randrange
 text_timer = 0
-map_list = ["maps/map.txt","maps/map3.txt","maps/map4.txt"]
+map_list = ["maps/map.txt", "maps/map1.5.txt" , "maps/map3.txt", "maps/map3.5.txt", "maps/map3.6.txt"   "maps/map4.txt",  "maps/4.5.txt"]
 map_index = 0
 
 
@@ -103,11 +125,11 @@ def home_screen():
     
 
     
-pygame.display.toggle_fullscreen()
+#pygame.display.toggle_fullscreen()
 avaX = 400
 avaY = 600
 ava = last_idle
-ava_start_list = ["400,600","750,630","545,600"]
+ava_start_list = ["400,600","750,630","545,600","545,600","545,600","545,600"]
 ava_rect = ava.get_rect(center = (avaX,avaY))
 ava.set_colorkey('White') 
 
@@ -130,7 +152,7 @@ class Music_list:
     scroll_sound = pygame.mixer.Sound('music/text_type.wav')
     title = pygame.mixer.Sound('music/title.mp3')
     over_world_1 = pygame.mixer.Sound("music/lost_woods.mp3")
-    playlist = [over_world_1,over_world_1,over_world_1]
+    playlist = [over_world_1,over_world_1,over_world_1,over_world_1,over_world_1]
     
 class special_sprite_set:
     # map 1 assets
@@ -143,13 +165,13 @@ class special_sprite_set:
     image_list_1 = [tree,cabin]
     rect_list_1 = [tree_rect,cabin_rect]
 
-    final_image_list = [ image_list_1, [],[] ]
-    final_rect_list = [  rect_list_1, [],[]   ]
+    final_image_list = [ image_list_1, [],[], [], [], [], [] ]
+    final_rect_list = [  rect_list_1, [],[], [], [], [], []   ]
     #--------------------------------------------------------------------------------------------------
 
 class dialogue:
     # map 1 dialogue
-    a0 = "A very long tree blocking the sun"
+    a0 = "it was a bright cold day in april, and the clocks were striking thirteen. Winston smith, his chin nuzzled into his breast in an effort to escape the vile wind, slipped quickly through the glass doors of the victory mansions, though not quickly enough to prevent a swirl of gritty dust from entering along with him"
     a1 = "A worn down cabin, with numerous repairs and patches, with materials no longer found upon this planet or any other "
     list_a = [a0,a1]
     #----------------------------------------------------------------------------
@@ -245,7 +267,7 @@ def Animate():
 max_speed = 15
 battle_opt = 0
 while running:
-    #battle_opt +=0.01
+    #battle_opt +=0.01 move this to overwold state latger
     if int(battle_opt) >= 5:
         battle_opt = 0
         choice = randrange(0,2)
@@ -296,7 +318,7 @@ while running:
                         pygame.quit()
 
     if home_state == 0: # overwold state, map exploration  here
-        print(map_index,avaX,avaY)
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT: 
                 running = False
@@ -374,6 +396,8 @@ while running:
                 dialogue_timer = 0
                 dialogue_option = special_lists.index(collide_check(ava_rect,wall_rect_list=wall_list,directions="up"))
                 dialogue_str = dialogue.final_list[map_index][dialogue_option]
+                dialogue_list  = str_split(dialogue_str,180) 
+                
             
             key = True
             direction = 'up'
@@ -400,34 +424,79 @@ while running:
           
     if home_state == "dialogue":
         
+        
         for event in pygame.event.get():
-            print("in event loop")
-
+            
             if event.type == pygame.KEYDOWN  :
                         
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE and int(dialogue_timer) > 180:
+                    pygame.draw.rect(screen,"black",back_bg_1)
+                    pygame.draw.rect(screen,"black",back_bg_2)
+                    pygame.draw.rect(screen,"black",back_bg_3)
+
+                    dialogue_timer = 0 
+                    text_box_timer +=1
+
+                elif event.key == pygame.K_SPACE:
                     pygame.time.wait(30)
                     home_state = 0
+                    text_box_timer = 0
 
-      
+    
+
+        current_dialogue = dialogue_list[text_box_timer]
         if int(dialogue_timer) == len(dialogue_str) +1:
             pass
 
         else:
-            temp_text = dialogue_str[: int(dialogue_timer)]
-            dialogue_game = other_text_font.render(temp_text,False,"White")
-            dialogue_rect = dialogue_game.get_rect(midbottom = (640,40))
-            background_rect = dialogue_rect.inflate(30,20)
-            
-            pygame.draw.rect(screen,"Black",background_rect)
-            
-            screen.blit(dialogue_game,dialogue_rect)
-            Music_list.scroll_sound.play(0)
+            temp_text = current_dialogue[: int(dialogue_timer)]
 
-            dialogue_timer +=0.2
             
-            pygame.draw.rect(screen,"Black",background_rect)
-            screen.blit(dialogue_game,dialogue_rect)
+            
+            
+            Music_list.scroll_sound.play(0)
+            dialogue_timer +=0.2
+            # background rectange
+            back_txt = "2" * 65
+            back_txt_py = other_text_font.render(back_txt,False,"Black")
+            back_bg_1 = back_txt_py.get_rect(midbottom = (640,40))
+            back_bg_1 = back_bg_1.inflate(30,20)
+            back_bg_2 = back_txt_py.get_rect(midbottom = (640,80))
+            back_bg_2 =  back_bg_2.inflate(30,20)
+            back_bg_3 = back_txt_py.get_rect(midbottom = (640,120))
+            back_bg_3 = back_bg_3.inflate(30,20)
+            
+            #pygame.draw.rect(screen,"Black",back_txt_rect)
+
+
+            
+            if int(dialogue_timer) <= 60 or int(dialogue_timer) >=60:
+                if len(temp_text) < 60:
+                    text_1 = temp_text
+                else:
+                    text_1 = current_dialogue[: 60]
+                dialogue_game = other_text_font.render(text_1,False,"White")
+                dialogue_rect = dialogue_game.get_rect(midbottom = (640,40))
+                pygame.draw.rect(screen,"Black",back_bg_1)
+                screen.blit(dialogue_game,dialogue_rect)
+            if int(dialogue_timer) > 60:
+                if int(dialogue_timer) < 120:
+                    text_2 = current_dialogue[60 : int(dialogue_timer)]
+                else:
+                    text_2 = current_dialogue[60: 120]
+                text_2 = other_text_font.render(text_2,False,"White")
+                dialogue_rect_2 = dialogue_game.get_rect(midbottom = (640,80))
+                pygame.draw.rect(screen,"Black",back_bg_2)
+                screen.blit(text_2,dialogue_rect_2)
+            
+            if int(dialogue_timer) > 120:
+                text_3 = current_dialogue[120: int(dialogue_timer)]
+                text_3 = other_text_font.render(text_3,False,"White")
+                dialogue_rect_3 = dialogue_game.get_rect(midbottom = (640,120))
+                pygame.draw.rect(screen,"Black",back_bg_3)
+                screen.blit(text_3,dialogue_rect_3)
+
+
 
     if home_state == "combat":
         screen.fill("Pink")
