@@ -14,6 +14,8 @@ other_text_font = pygame.font.Font('font/Pixeltype.ttf',34)
 text_box_timer = 0
 
 
+Screen_W,Screen_H = 1280,720
+
 def str_split(str,splitter):
     str_list  = []
     temp_str = ""
@@ -38,7 +40,7 @@ def str_split(str,splitter):
 
 from random import randrange
 text_timer = 0
-map_list = ["maps/map.txt", "maps/map1.5.txt" , "maps/map3.txt", "maps/map3.5.txt", "maps/map3.6.txt"   "maps/map4.txt",  "maps/4.5.txt"]
+map_list = ["maps/map.txt", "maps/map1.5.txt" , "maps/map3.txt", "maps/map3.5.txt", "maps/map3.6.txt"  , "maps/map4.txt",  "maps/4.5.txt"]
 map_index = 0
 
 
@@ -129,7 +131,7 @@ def home_screen():
 avaX = 400
 avaY = 600
 ava = last_idle
-ava_start_list = ["400,600","750,630","545,600","545,600","545,600","545,600"]
+ava_start_list = ["400,600","750,630","800,600","800,600","545,600","545,600"]
 ava_rect = ava.get_rect(center = (avaX,avaY))
 ava.set_colorkey('White') 
 
@@ -268,14 +270,7 @@ max_speed = 15
 battle_opt = 0
 while running:
     #battle_opt +=0.01 move this to overwold state latger
-    if int(battle_opt) >= 5:
-        battle_opt = 0
-        choice = randrange(0,2)
-        if choice == 0:
-            pass
-        else:
-            home_state = "combat"
-   
+
     if home_state == 1: # home screen state, 
         # generating text one word at a time
         home_screen()
@@ -318,7 +313,15 @@ while running:
                         pygame.quit()
 
     if home_state == 0: # overwold state, map exploration  here
-        
+        battle_opt +=0.02
+        if int(battle_opt) >= 5:
+            battle_opt = 0
+            choice = randrange(0,2)
+            if choice == 0:
+                pass
+            else:
+                home_state = "combat"
+   
         for event in pygame.event.get():
             if event.type == pygame.QUIT: 
                 running = False
@@ -454,7 +457,7 @@ while running:
             
             
             
-            Music_list.scroll_sound.play(0)
+            
             dialogue_timer +=0.2
             # background rectange
             back_txt = "2" * 65
@@ -471,6 +474,7 @@ while running:
 
             
             if int(dialogue_timer) <= 60 or int(dialogue_timer) >=60:
+                Music_list.scroll_sound.play(0)
                 if len(temp_text) < 60:
                     text_1 = temp_text
                 else:
@@ -499,6 +503,7 @@ while running:
 
 
     if home_state == "combat":
+        # PUT COMBAT LOGIC HERE: YOU CAN REPLACE THE STUFF HERE
         screen.fill("Pink")
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
