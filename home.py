@@ -39,9 +39,6 @@ def str_split(str,splitter):
 
 
 from random import randrange
-text_timer = 0
-map_list = ["maps/map.txt", "maps/map1.5.txt" , "maps/map3.txt", "maps/map3.5.txt", "maps/map3.6.txt"  , "maps/map4.txt",  "maps/4.5.txt"]
-map_index = 0
 
 
 
@@ -128,10 +125,17 @@ def home_screen():
 
     
 #pygame.display.toggle_fullscreen()
-avaX = 400
-avaY = 600
+
 ava = last_idle
-ava_start_list = ["400,600","750,630","800,600","800,600","545,600","545,600"]
+ava_start_list = ["400,600","750,630","800,600","800,600","800,600","545,500","545,600","545,600","545,600","545,600","545,600"]
+text_timer = 0
+map_list = ["maps/map.txt", "maps/map1.5.txt" , "maps/map3.txt", "maps/map3.5.txt", "maps/map3.6.txt"  , "maps/map4.txt",  "maps/4.5.txt","maps/map5.txt", "maps/map5.1.txt","maps/map5.2.txt"]
+map_index = 0
+tile_lister = ["1","1","1","1","1","1","1","2","2","2"]
+x,y = ava_start_list[map_index].split(",")
+x,y = int(x),int(y)
+avaX,avaY = x,y
+ava_rect = ava.get_rect(center = (avaX,avaY))
 ava_rect = ava.get_rect(center = (avaX,avaY))
 ava.set_colorkey('White') 
 
@@ -145,16 +149,36 @@ class tile_set_1:
     forest_2 = pygame.image.load("tiles/F2.png").convert_alpha()
     tile_dict = {"@": ice, " " : snow, "$" : water, "E": cobble_stone, "#": cobble_stone, "A" :cobble_stone, "L": plank, "D" : plank,'%':plank
     ,"F": forest_1,"f":forest_2 }
-    default = snow
     walls = ["$","@","F","f"]
     exits = ["E","L"]
     entrance = ['A','D']
-    
+
+class tile_set_2:
+    ice = pygame.image.load("tiles/ground3.png").convert_alpha()
+    cobble_stone = pygame.image.load("tiles/ground2.png").convert_alpha()
+    wall1 = pygame.image.load("factory_tiles/wall1.jpg").convert_alpha()
+    wall2 = pygame.image.load("factory_tiles/wall2.jpg").convert_alpha()
+    wall3 = pygame.image.load("factory_tiles/wall3.jpg").convert_alpha()
+    wall4 = pygame.image.load("factory_tiles/wall4.jpg").convert_alpha()
+    factoryfloor1 = pygame.image.load("factory_tiles/Factoryfloor1.jpg").convert_alpha()
+    factoryfloor2 = pygame.image.load("factory_tiles/Factoryfloor2.jpg").convert_alpha()
+    factoryfloor3 = pygame.image.load("factory_tiles/Factoryfloor3.jpg").convert_alpha()
+    corner1 = pygame.image.load("factory_tiles/Corner1.jpg").convert_alpha()
+    corner2 = pygame.image.load("factory_tiles/Corner2.jpg").convert_alpha()
+    corner3 = pygame.image.load("factory_tiles/Corner3.jpg").convert_alpha()
+    corner4 = pygame.image.load("factory_tiles/Corner4.jpg").convert_alpha()
+    blacky = pygame.image.load("factory_tiles/black.jpg").convert_alpha()
+    tile_dict = { "Z" : corner1, "z" : corner2, "X": corner3, "x" : corner4, "N" :wall1, "n" : wall2, "M" : wall3, "m" : wall4,"B" :factoryfloor1, "b" : factoryfloor2, "V" : factoryfloor3, "y" : factoryfloor1, "Y": factoryfloor1, " ": blacky, "@": ice,"#" : cobble_stone, "A" : cobble_stone }
+    walls = ["Z","z","X","x","N","n","M","m"]
+    exits = ["Y"]
+    entrance = ["y","A"]
+
+
 class Music_list:
     scroll_sound = pygame.mixer.Sound('music/text_type.wav')
     title = pygame.mixer.Sound('music/title.mp3')
     over_world_1 = pygame.mixer.Sound("music/lost_woods.mp3")
-    playlist = [over_world_1,over_world_1,over_world_1,over_world_1,over_world_1]
+    playlist = [over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1]
     
 class special_sprite_set:
     # map 1 assets
@@ -167,14 +191,14 @@ class special_sprite_set:
     image_list_1 = [tree,cabin]
     rect_list_1 = [tree_rect,cabin_rect]
 
-    final_image_list = [ image_list_1, [],[], [], [], [], [] ]
-    final_rect_list = [  rect_list_1, [],[], [], [], [], []   ]
+    final_image_list = [ image_list_1, [],[], [], [], [], [],[],[],[],[] ]
+    final_rect_list = [  rect_list_1, [],[], [], [], [], [] ,[],[] ,[] ]
     #--------------------------------------------------------------------------------------------------
 
 class dialogue:
     # map 1 dialogue
-    a0 = "it was a bright cold day in april, and the clocks were striking thirteen. Winston smith, his chin nuzzled into his breast in an effort to escape the vile wind, slipped quickly through the glass doors of the victory mansions, though not quickly enough to prevent a swirl of gritty dust from entering along with him"
-    a1 = "A worn down cabin, with numerous repairs and patches, with materials no longer found upon this planet or any other "
+    a0 = "........................"
+    a1 = "........................"
     list_a = [a0,a1]
     #----------------------------------------------------------------------------
     final_list = [list_a,[]]
@@ -187,15 +211,14 @@ def draw_map():
     global map_list
     global map_index
     global tile_set_1
-    tile_set = tile_set_1.tile_dict
-    walls = tile_set_1.walls
-    exits = tile_set_1.exits
-    entrance = tile_set_1.entrance
+    tile_set =    eval( current_tile_set + ".tile_dict" )     # tile_set_1.tile_dict
+    walls =     eval( current_tile_set + ".walls" )                      ## tile_set_1.walls
+    exits =           eval(current_tile_set + ".exits")               #tile_set_1.exits
+    entrance =         eval(current_tile_set + ".entrance")                        # tile_set_1.entrance
     wall_rect_list = []
     exit_rect_list = []
     entrance_rect_list = []
     special_list = []
-    default = tile_set_1.default
     map = map_import(map_list[map_index],1280,720)
 
     
@@ -203,7 +226,6 @@ def draw_map():
         for item in row:
             tile = tile_set[ row[item] ]
             wally = tile.get_rect(topleft = item)
-            screen.blit(default,wally)
             screen.blit(tile,wally)
             if row[item] in walls:
                 wall_rect_list.append(wally)
@@ -313,7 +335,7 @@ while running:
                         pygame.quit()
 
     if home_state == 0: # overwold state, map exploration  here
-        battle_opt +=0.02
+        #battle_opt +=0.02
         if int(battle_opt) >= 5:
             battle_opt = 0
             choice = randrange(0,2)
@@ -322,18 +344,20 @@ while running:
             else:
                 home_state = "combat"
    
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT: 
                 running = False
 
     # loads map
 
-    
+        tiler = tile_lister[map_index]
+        current_tile_set =  "tile_set_" + tiler
         mapy,wall_list,exit_list,entrance_list,special_lists = draw_map()
       # gets ava cords
         ava_rect = ava.get_rect(center = (avaX,avaY))
 
-        
+        print(map_list[map_index])
 
 
 
