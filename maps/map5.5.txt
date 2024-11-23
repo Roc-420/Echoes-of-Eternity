@@ -1,0 +1,16 @@
+          mYYYM                 
+          mBBBM                 
+ mNNNNNNNNmBBBMNNNNNNNNNNNNNM   
+ mVVVVBBBBBBBBBBBBBBBBBBVVVVM   
+ mVVVVBBBBBBBBBBBBBBBBBBVVVVM   
+ mVVVVBBBmNNNNNNNNNNMBBBVVVVM   
+ mVVVVBBBm          MBBBVVVVM   
+ mVVVVBBBm          MBBBVVVVM   
+ mVVVVBBBm          MBBBVVVVM   
+ mVVVVBBBmnnnnnnnnnnMBBBVVVVM   
+ mVVVVBBBBBBBBBBBBBBBBBBVVVVM   
+ mVVVVBBBBBBBBBBBBBBBBBBVVVVM   
+ mVVVVVVVVVBBBVVVVVVVVVVVVVVM   
+ mnnnnnnnnnBBBnnnnnnnnnnnnnnM   
+          mBBBM                 
+          myyyM                  

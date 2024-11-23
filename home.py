@@ -127,11 +127,11 @@ def home_screen():
 #pygame.display.toggle_fullscreen()
 
 ava = last_idle
-ava_start_list = ["400,600","750,630","800,600","800,600","800,600","545,500","545,600","545,600","545,600","545,600","545,600"]
+ava_start_list = ["400,600","750,630","800,600","800,600","800,600","500,600","500,600","500,600","540,590","880,300","545,600","545,600","545,600","545,600","1100,600","700,600","600,600"]
 text_timer = 0
-map_list = ["maps/map.txt", "maps/map1.5.txt" , "maps/map3.txt", "maps/map3.5.txt", "maps/map3.6.txt"  , "maps/map4.txt",  "maps/4.5.txt","maps/map5.txt", "maps/map5.1.txt","maps/map5.2.txt"]
+map_list = ["maps/map.txt", "maps/map1.5.txt" , "maps/map3.txt", "maps/map3.5.txt", "maps/map3.6.txt"  , "maps/map4.txt",  "maps/4.5.txt","maps/map5.txt", "maps/map5.1.txt","maps/map5.2.txt", "maps/map5.3.txt", "maps/map5.4.txt", "maps/map5.5.txt", "maps/map6.txt","maps/map6.1.txt","maps/map6.2.txt","maps/map6.3.txt"]
 map_index = 0
-tile_lister = ["1","1","1","1","1","1","1","2","2","2"]
+tile_lister = ["1","1","1","1","1","1","1","2" ,"2" ,"2" ,"2"   ,"2","2","3","3","3","3"]
 x,y = ava_start_list[map_index].split(",")
 x,y = int(x),int(y)
 avaX,avaY = x,y
@@ -155,6 +155,7 @@ class tile_set_1:
 
 class tile_set_2:
     ice = pygame.image.load("tiles/ground3.png").convert_alpha()
+    snow = pygame.image.load("tiles/ground1.png").convert_alpha()
     cobble_stone = pygame.image.load("tiles/ground2.png").convert_alpha()
     wall1 = pygame.image.load("factory_tiles/wall1.jpg").convert_alpha()
     wall2 = pygame.image.load("factory_tiles/wall2.jpg").convert_alpha()
@@ -168,17 +169,30 @@ class tile_set_2:
     corner3 = pygame.image.load("factory_tiles/Corner3.jpg").convert_alpha()
     corner4 = pygame.image.load("factory_tiles/Corner4.jpg").convert_alpha()
     blacky = pygame.image.load("factory_tiles/black.jpg").convert_alpha()
-    tile_dict = { "Z" : corner1, "z" : corner2, "X": corner3, "x" : corner4, "N" :wall1, "n" : wall2, "M" : wall3, "m" : wall4,"B" :factoryfloor1, "b" : factoryfloor2, "V" : factoryfloor3, "y" : factoryfloor1, "Y": factoryfloor1, " ": blacky, "@": ice,"#" : cobble_stone, "A" : cobble_stone }
+    tile_dict = { "Z" : corner1, "z" : corner2, "X": corner3, "x" : corner4, "N" :wall1, "n" : wall2, "M" : wall3, "m" : wall4,"B" :factoryfloor1, "b" : factoryfloor2, "V" : factoryfloor3, "y" : factoryfloor1, "Y": factoryfloor1, " ": blacky, "@": ice,"#" : cobble_stone, "A" : cobble_stone , "t": snow}
     walls = ["Z","z","X","x","N","n","M","m"]
     exits = ["Y"]
     entrance = ["y","A"]
 
-
+class tile_set_3:
+    rfloor1 = pygame.image.load("research_tile/Rfloor1.jpg").convert_alpha()
+    rfloor2 = pygame.image.load("research_tile/Rfloor2.jpg").convert_alpha()
+    rfloor3 = pygame.image.load("research_tile/Rfloor3.jpg").convert_alpha()
+    rwall1 = pygame.image.load("research_tile/Rwall1.jpg").convert_alpha()
+    rwall2 = pygame.image.load("research_tile/Rwall2.jpg").convert_alpha()
+    rwall3 = pygame.image.load("research_tile/Rwall3.jpg").convert_alpha()
+    rwall4 = pygame.image.load("research_tile/Rwall4.jpg").convert_alpha()
+    blacky = pygame.image.load("factory_tiles/black.jpg").convert_alpha()
+    tile_dict = {"J" : rfloor1, "j" : rfloor2, "K" : rfloor3, "O": rwall1, "o" : rwall2, "P" : rwall3, "p" : rwall4, "U": rfloor1, "u" : rfloor1, " " : blacky}
+    walls = ["O","o","P","p"]
+    exits = ["U"]
+    entrance = ["u"]
+    #{"J": tiles/Rfloor1.jpg, "j": tiles/Rfloor2.jpg, "K": tiles/Rfloor3.jpg, "O": tiles/Rwall1.jpg, "o": tiles/Rwall2.jpg, "P": tiles/Rwall3.jpg, "p": tiles/Rwall4.jpg, "U": tiles/Rfloor1.jpg, "u": tiles/Rfloor1.jpg,}
 class Music_list:
     scroll_sound = pygame.mixer.Sound('music/text_type.wav')
     title = pygame.mixer.Sound('music/title.mp3')
     over_world_1 = pygame.mixer.Sound("music/lost_woods.mp3")
-    playlist = [over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1]
+    playlist = [over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1]
     
 class special_sprite_set:
     # map 1 assets
@@ -190,9 +204,10 @@ class special_sprite_set:
     cabin_rect = cabin.get_rect( center =  (1000,300))   
     image_list_1 = [tree,cabin]
     rect_list_1 = [tree_rect,cabin_rect]
+    #------------------------------------------------------------------------------------------------------------
 
-    final_image_list = [ image_list_1, [],[], [], [], [], [],[],[],[],[] ]
-    final_rect_list = [  rect_list_1, [],[], [], [], [], [] ,[],[] ,[] ]
+    final_image_list = [ image_list_1, [],[], [], [], [], [],[],[],[],[],[],[],[],[],[],[],[] ]
+    final_rect_list = [  rect_list_1, [],[], [], [], [], [] ,[],[] ,[],[],[],[],[],[],[],[] ]
     #--------------------------------------------------------------------------------------------------
 
 class dialogue:
@@ -353,10 +368,11 @@ while running:
 
         tiler = tile_lister[map_index]
         current_tile_set =  "tile_set_" + tiler
+        screen.fill("Pink")
         mapy,wall_list,exit_list,entrance_list,special_lists = draw_map()
       # gets ava cords
         ava_rect = ava.get_rect(center = (avaX,avaY))
-
+        
         print(map_list[map_index])
 
 

@@ -1,6 +1,6 @@
 @@@@@@@@@@EEEEE@@@@@@@@@@@@@@@@@
 @@@@@      ###           @@@@@@@
-@@                          @@@@
+@@          #               @@@@
 @                              F
 @@@                            F
 @@                             F
@@ -13,4 +13,4 @@ ffffffF              fffffffffff
 ffffffffF       ffffffffffffffff
 fffffffffF     fffffffffffffffff
 fffffffffF ### fffffffffffffffff
-fffffffffFAAAAAfffffffffffffffff
+fffffffffFAAAAAfffffffffffffffffF

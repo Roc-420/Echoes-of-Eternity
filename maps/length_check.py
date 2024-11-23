@@ -17,7 +17,7 @@ def get_maze(l): # converts maze txt into array
 
 
 
-red = get_maze("map3.txt")
+red = get_maze("map6.2.txt")
 
 print(len(red))
 
