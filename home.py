@@ -203,21 +203,28 @@ class special_sprite_set:
     cabin = pygame.image.load("special_sprite/Cabin.png")
     cabin = pygame.transform.rotozoom(cabin,0,2)
     cabin_rect = cabin.get_rect( center =  (1000,300))   
-    image_list_1 = [tree,cabin]
-    rect_list_1 = [tree_rect,cabin_rect]
+    talk = pygame.image.load("special_sprite/talk.png")
+    talk = pygame.transform.rotozoom(talk,0,2)
+    talk_rect = talk.get_rect(center = (400,300))
+    image_list_1 = [tree,cabin,talk]
+    rect_list_1 = [tree_rect,cabin_rect,talk_rect]
     #------------------------------------------------------------------------------------------------------------
+    ship = pygame.image.load("special_sprite/Ship_full.png")
+    ship_rect = ship.get_rect(center = (360,600))
 
-    final_image_list = [ image_list_1, [],[], [], [], [], [],[],[],[],[],[],[],[],[],[],[],[] ]
-    final_rect_list = [  rect_list_1, [],[], [], [], [], [] ,[],[] ,[],[],[],[],[],[],[],[] ]
+    final_image_list = [ image_list_1, [],[ship], [], [], [], [],[],[],[],[],[],[],[],[],[],[],[] ]
+    final_rect_list = [  rect_list_1, [],[ship_rect], [], [], [], [] ,[],[] ,[],[],[],[],[],[],[],[] ]
     #--------------------------------------------------------------------------------------------------
 
 class dialogue:
     # map 1 dialogue
     a0 = "........................"
     a1 = "........................"
-    list_a = [a0,a1]
+    a3 = " Hello! How are you doing today (You shiver from the cold)"
+    list_a = [a0,a1,a3]
     #----------------------------------------------------------------------------
-    final_list = [list_a,[]]
+    list_b = ["...."]
+    final_list = [list_a,[list_b]]
 
 
 Music_list.title.play(-1)
@@ -417,7 +424,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="left"):
                 pass
             else:
-                avaX -=2
+                avaX -=1
             
             key = True 
             direction = 'left'
@@ -426,7 +433,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="right"):
                 pass
             else:
-                avaX +=2
+                avaX +=1
             key = True
             direction = 'right'
         elif keys[pygame.K_w]:
@@ -434,7 +441,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="up"):
                 pass
             else:
-                avaY -=2
+                avaY -=1
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="up") in special_lists and keys[pygame.K_SPACE]:
                 home_state = "dialogue"
                 dialogue_timer = 0
@@ -442,7 +449,7 @@ while running:
                 dialogue_str = dialogue.final_list[map_index][dialogue_option]
                 dialogue_list  = str_split(dialogue_str,180) 
                 
-            
+        
             key = True
             direction = 'up'
         elif keys[pygame.K_s]:
@@ -450,7 +457,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="down"):
                 pass
             else:
-                avaY +=2
+                avaY +=1
             key = True
             direction = 'down'
         
