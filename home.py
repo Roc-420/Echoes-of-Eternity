@@ -190,9 +190,10 @@ class tile_set_3:
     #{"J": tiles/Rfloor1.jpg, "j": tiles/Rfloor2.jpg, "K": tiles/Rfloor3.jpg, "O": tiles/Rwall1.jpg, "o": tiles/Rwall2.jpg, "P": tiles/Rwall3.jpg, "p": tiles/Rwall4.jpg, "U": tiles/Rfloor1.jpg, "u": tiles/Rfloor1.jpg,}
 class Music_list:
     scroll_sound = pygame.mixer.Sound('music/text_type.wav')
-    title = pygame.mixer.Sound('music/title.mp3')
-    over_world_1 = pygame.mixer.Sound("music/lost_woods.mp3")
-    playlist = [over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1,over_world_1]
+    title = pygame.mixer.Sound('music/home.mp3')
+    chill = pygame.mixer.Sound("music/chill.mp3")
+    scary = pygame.mixer.Sound("music/scary.mp3")
+    playlist = [chill,chill,chill,chill,chill,chill,chill     ,scary,scary,scary,scary,scary,scary,scary,scary,scary,scary]
     
 class special_sprite_set:
     # map 1 assets
