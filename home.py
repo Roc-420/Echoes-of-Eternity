@@ -13,7 +13,7 @@ test_font_1 = pygame.font.Font('font/Pixeltype.ttf',139)
 other_text_font = pygame.font.Font('font/Pixeltype.ttf',34)
 text_box_timer = 0
 
-
+from logue import dialogue
 Screen_W,Screen_H = 1280,720
 
 def str_split(str,splitter):
@@ -205,26 +205,49 @@ class special_sprite_set:
     cabin_rect = cabin.get_rect( center =  (1000,300))   
     talk = pygame.image.load("special_sprite/talk.png")
     talk = pygame.transform.rotozoom(talk,0,2)
-    talk_rect = talk.get_rect(center = (400,300))
+    talk_rect = talk.get_rect(center = (300,300))
     image_list_1 = [tree,cabin,talk]
     rect_list_1 = [tree_rect,cabin_rect,talk_rect]
     #------------------------------------------------------------------------------------------------------------
+    talk_0 = talk.get_rect(center = (600,400))
+    #-----------------
+
+
+
     ship = pygame.image.load("special_sprite/Ship_full.png")
+    ship = pygame.transform.rotozoom(ship,0,2)
     ship_rect = ship.get_rect(center = (360,600))
+    talk2 = talk.get_rect(center = (300,300))
+    #--------
+    talk3 = talk.get_rect(center= (750,400))
+    #----------
+    talk4 = talk.get_rect(  center = (700,200))
+    #--------
+    talk5 = talk.get_rect(center = (500,400))
+    #---------
+    talk6 = talk.get_rect(center = (300,300))
+    #---------
+    talk7 = talk.get_rect(center = (300,300))
+    #---------
+    talk8 = talk.get_rect(center = (300,300))
+    #---------
+    talk9 = talk.get_rect(center = (300,300))
+    #---------
+    talk10 = talk.get_rect(center = (470,300))
+    #---------
+    talk11 = talk.get_rect(center = (470,300))
+    #---------
+    talk12 = talk.get_rect(center = (280,300))
+    #---------
+    talk13 = talk.get_rect(center = (280,300))
+    #---------
+    talk14 = talk.get_rect(center = (280,170))
+    #---------
+    talk15 = talk.get_rect(center = (640,300))
 
-    final_image_list = [ image_list_1, [],[ship], [], [], [], [],[],[],[],[],[],[],[],[],[],[],[] ]
-    final_rect_list = [  rect_list_1, [],[ship_rect], [], [], [], [] ,[],[] ,[],[],[],[],[],[],[],[] ]
+    final_image_list = [ image_list_1, [talk],[ship,talk], [talk],         [talk], [talk], [talk],[talk],[talk],[talk],[talk],[talk],[talk],[talk],[talk],[talk],[talk],[talk] ]
+    final_rect_list = [  rect_list_1, [talk_0],[ship_rect,talk2], [talk3], [talk4], [talk5], [talk6] ,[talk7],[talk8] ,[talk9],[talk10],[talk11],[talk12],[talk13],[talk14],[talk15],[] ]
     #--------------------------------------------------------------------------------------------------
-
-class dialogue:
-    # map 1 dialogue
-    a0 = "........................"
-    a1 = "........................"
-    a3 = " Hello! How are you doing today (You shiver from the cold)"
-    list_a = [a0,a1,a3]
-    #----------------------------------------------------------------------------
-    list_b = ["...."]
-    final_list = [list_a,[list_b]]
 
 
 Music_list.title.play(-1)
@@ -328,16 +351,16 @@ while running:
         
             if event.type == pygame.KEYDOWN:
                 
-                if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                if event.key == pygame.K_w or event.key == pygame.K_s:
                     scroll = pygame.mixer.Sound('music/move.mp3')
                     scroll.play(0)  
-                if event.key == pygame.K_UP:
+                if event.key == pygame.K_w:
                     if end_state == 1:
                         end_state =0
                         start_state = 1
                     else:
                         pass
-                if event.key == pygame.K_DOWN:
+                if event.key == pygame.K_s:
                     if start_state == 1:
                         start_state = 0
                         end_state = 1
@@ -348,8 +371,11 @@ while running:
                     select = pygame.mixer.Sound('music/select.mp3')
                     select.play(0)
                     if start_state == 1:
-
-                        home_state = 0
+                        screen.fill("Black")
+                        home_state = "dialogue"
+                        dialogue_timer = 0
+                        dialogue_str = " In a distant universe, where peace has long been forgetton, and humankind are haunted by the disturbing creations of their ancestors, living lives of fear and paranoia, an unlikely meeting between two individuals would give it renewed hope and set the trajectory for the future of mankind..............................."
+                        dialogue_list  = str_split(dialogue_str,180) 
                         Music_list.title.stop()
                         Music_list.playlist[map_index].play(-1)
                     
@@ -424,7 +450,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="left"):
                 pass
             else:
-                avaX -=1
+                avaX -=5
             
             key = True 
             direction = 'left'
@@ -433,7 +459,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="right"):
                 pass
             else:
-                avaX +=1
+                avaX +=5
             key = True
             direction = 'right'
         elif keys[pygame.K_w]:
@@ -441,7 +467,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="up"):
                 pass
             else:
-                avaY -=1
+                avaY -=5
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="up") in special_lists and keys[pygame.K_SPACE]:
                 home_state = "dialogue"
                 dialogue_timer = 0
@@ -457,7 +483,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="down"):
                 pass
             else:
-                avaY +=1
+                avaY +=5
             key = True
             direction = 'down'
         
