@@ -2,12 +2,11 @@
 import pygame
 import time
 from random import random
-from colorama import Back,Style,Fore
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
-suprise_opt = False
+suprise_opt = True
 test_font = pygame.font.Font('font/Pixeltype.ttf',155)
 test_font_1 = pygame.font.Font('font/Pixeltype.ttf',139)
 other_text_font = pygame.font.Font('font/Pixeltype.ttf',34)
@@ -254,7 +253,7 @@ class Combat():
         self.Emoves = self.enemy[2]
         print(self.Emoves)
         self.eTURN = False
-        self.finish = False
+
         self.ult_check = 0
 
 
@@ -461,11 +460,12 @@ class Combat():
         self.count = False
         self.counter = 0
         self.click = 0
-        self.buttons = 'menu'
         self.win_check = False
         self.Ultimate = False
         self.charge = 0
         self.stun = 0
+        self.semifin = False
+        self.finish = False
 
         self.end = False
         self.match = False
@@ -925,7 +925,7 @@ class Combat():
                 if self.count:
                     self.text = f'Spam click the screen to deal more damage!! X{self.charge}'
                 elif self.count == False:
-                    self.damage = self.clvl*(self.charge*1.5)
+                    self.damage = self.clvl*(self.charge*3)
                     self.Ultimate = False
                     self.text = f'The Ultimate did {self.damage} damage with a multiplier of {self.charge}!'
                     self.eTURN = True
@@ -965,10 +965,12 @@ class Combat():
                     self.current_HP -= round((self.Eattack*self.enemy_multiplier*self.enemylvl)/3) # enemy damage
                 print(self.enemy_multiplier)
                 self.charge = 0
-                
-                self.buttons = 'menu'
                 self.semifin = False
                 self.finish = False
+
+                self.buttons = 'menu'
+                print(self.buttons,"button state")
+                
                 
 #----------------------------------------------------------------------------------------------------------------
         pygame.mouse.set_visible(False)
@@ -1046,8 +1048,8 @@ class Music_list:
     scroll_sound = pygame.mixer.Sound('music/text_type.wav')
     title = pygame.mixer.Sound('music/home.mp3')
     intro = pygame.mixer.Sound("music/intro.mp3")
-    chill = pygame.mixer.Sound("music/intro.mp3") # change back
-    scary = pygame.mixer.Sound("music/intro.mp3") # change back
+    chill = pygame.mixer.Sound("music/chill.mp3") # change back
+    scary = pygame.mixer.Sound("music/scary.mp3") # change back
     write = pygame.mixer.Sound("music/write.mp3")
     suprise = pygame.mixer.Sound("music/suprise.mp3")
     final = pygame.mixer.Sound("music/final.mp3")
@@ -1248,7 +1250,7 @@ while running:
     if home_state ==   0: # overwold state, map exploration  here 0.01 8
 
         if map_index != 0 and map_index != len(map_list) -1:
-            battle_opt +=0.0 # fux
+            battle_opt +=0.02 # fux
             pass
         if map_index == 8:
             suprise_counter +=0.02
@@ -1494,7 +1496,6 @@ while running:
                 pygame.mouse.set_visible(True)
             elif home_state == 'combat':
                 p1.enter_combat()
-                print('blitting')
             if home_state == 0:
                 if win:
                     print("win!!!1")

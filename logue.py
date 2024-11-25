@@ -1,6 +1,8 @@
 
 
-
+"""
+sign1 Walk around and explore, you'll find plenty of things. When finding an enemy you can fight it, By choosing one of the 3 party memebers you can deal damage, heal, buff/debuff, and charge your ultimate. If you lose you will be sent back 2 maps. Good luck on your adventure!
+"""
 
 class dialogue:
     # map 1 dialogue
