@@ -47,13 +47,21 @@ class Combat():
         #Name, HP (to be multiplied by level), moves
         
         self.hound_moves = {'Tackle':2, 'Bite':5}
-        self.hound = ['Hound', 20, self.hound_moves]
+        self.hound = ['Hound', 20, self.hound_moves, 'enemy/Hound.png', (925, 285), (250,125)]
 
-        self.brute_moves = {'Smash':10, 'Charge':0}
-        self.brute = ['Brute', 30, self.brute_moves]
+        self.acalica_moves = {'Beam':11, 'Charge':2}
+        self.acalica = ['Acalica', 35, self.acalica_moves, 'enemy/Acalica.png', (975, 175), (300,275)]
+
+        self.bitumen_moves = {'Sludge':2, 'Charge':0}
+        self.bitumen = ['Bitumen', 5, self.bitumen_moves, 'enemy/Bitumen.png', (975, 300), (125,100)]
+
+        self.ignissus_moves = {'Penetrate':2, 'Slashy':4}
+        self.ignissus = ['Ignissus', 8, self.ignissus_moves, 'enemy/Ignissus.png', (950, 225), (125,190)]
+
+
         self.Eattack = 0
 
-        self.enemies = [self.hound, self.brute]
+        self.enemies = [self.hound, self.acalica, self.bitumen, self.ignissus]
         
         for i in range(len(self.enemies)):
             if enemy == self.enemies[i-1][0]:
@@ -66,6 +74,12 @@ class Combat():
         self.enemy_HP = int(self.enemy[1])*self.enemylvl
         self.current_eHP = self.enemy_HP
 
+        self.enemy_sprite = pygame.image.load(self.enemy[3])
+
+        self.enemy_rect = self.enemy_sprite.get_rect(center = self.enemy[4])
+        self.enemy_sprite = pygame.transform.scale(self.enemy_sprite, self.enemy[5])
+        self.enemy_sprite.set_colorkey('White')
+        
         self.Emoves = self.enemy[2]
         print(self.Emoves)
         self.eTURN = False
@@ -320,7 +334,7 @@ class Combat():
         screen.blit(self.enemy_platform, self.EP_rect)
 
         screen.blit(self.ava_idle_right,(self.ava_combat_rect))
-        
+        screen.blit(self.enemy_sprite,(self.enemy_rect))
         #buttons
         self.mouse_pos = pygame.mouse.get_pos()
         self.mouse_rect.center = self.mouse_pos
