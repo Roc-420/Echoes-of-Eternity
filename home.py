@@ -1,7 +1,7 @@
 # Example file showing a basic pygame "game loop"
 import pygame
 import time
-
+from random import random
 from colorama import Back,Style,Fore
 # pygame setup
 pygame.init()
@@ -202,9 +202,10 @@ screen = pygame.display.set_mode((Screen_W, Screen_H))
 
 inpos = False
 running = True
-
-class Combater():
-    def __init__(self, enemy, enemylvl, clvl, BGLOAD): #enemy being fought, Clvl - current level,
+win = False
+lose = False
+class Combat():
+    def __init__(self, enemy, enemylvl, clvl, BGLOAD): #enemy being fought, Clvl - current level,x
         self.BGLOAD = BGLOAD
 
         self.enemylvl = enemylvl
@@ -215,11 +216,20 @@ class Combater():
 
         #Name, HP (to be multiplied by level), moves
         
-        self.hound_moves = {'Tackle':5, 'Bite':10}
-        self.hound = ['Hound', 20, self.hound_moves]
+        self.hound_moves = {'Tackle':2, 'Bite':5}
+        self.hound = ['Hound', 20, self.hound_moves, 'enemy/Hound.png', (925, 285), (250,125)]
 
-        self.brute_moves = {'Smash':15, 'Charge':0}
-        self.brute = ['Brute', 30, self.brute_moves]
+        self.acalica_moves = {'Beam':11, 'Charge':2}
+        self.acalica = ['Acalica', 35, self.acalica_moves, 'enemy/Acalica.png', (975, 175), (300,275)]
+
+        self.bitumen_moves = {'Sludge':2, 'Charge':0}
+        self.bitumen = ['Bitumen', 5, self.bitumen_moves, 'enemy/Bitumen.png', (975, 300), (125,100)]
+
+        self.ignissus_moves = {'Penetrate':2, 'Slashy':4}
+        self.ignissus = ['Ignissus', 8, self.ignissus_moves, 'enemy/Ignissus.png', (950, 225), (125,190)]
+
+
+        self.Eattack = 0
 
         self.enemies = [self.hound, self.acalica, self.bitumen, self.ignissus]
         
@@ -234,9 +244,18 @@ class Combater():
         self.enemy_HP = int(self.enemy[1])*self.enemylvl
         self.current_eHP = self.enemy_HP
 
+        self.enemy_sprite = pygame.image.load(self.enemy[3])
 
-        self.click = 0
-        self.buttons = 'menu'
+        self.enemy_rect = self.enemy_sprite.get_rect(center = self.enemy[4])
+        self.enemy_sprite = pygame.transform.scale(self.enemy_sprite, self.enemy[5])
+        self.enemy_sprite.set_colorkey('White')
+        
+        self.Emoves = self.enemy[2]
+        print(self.Emoves)
+        self.eTURN = False
+        self.finish = False
+        self.ult_check = 0
+
 
     def rect_init(self):
         self.BG = pygame.image.load(self.BGLOAD)
@@ -479,7 +498,7 @@ class Combater():
             self.avaX, self.avaY = self.PP_rect.x, self.PP_rect.y
 
     def enter_combat(self):
-        global home_state, win, loss
+        global home_state, win, loss #????????????????????????????
         screen.blit(self.BG,(0,0))
         screen.blit(self.player_platform, self.PP_rect)
         screen.blit(self.enemy_platform, self.EP_rect)
@@ -534,7 +553,10 @@ class Combater():
             self.end = True
 
         if self.end and self.count == False:
-            home_state = 0
+            if map_index == len(map_list) - 1:
+                home_state = "end"
+            else:
+                home_state = 0
             self.end = False
         elif self.end and self.count:
             self.battle = Battle_text.render(self.text, False, (255,255,255))
@@ -950,8 +972,9 @@ class Combater():
 #----------------------------------------------------------------------------------------------------------------
         pygame.mouse.set_visible(False)
         screen.blit(self.cursor, self.mouse_rect)
+        
 
-    
+
 #pygame.display.toggle_fullscreen()
 
 ava = last_idle
@@ -1022,8 +1045,8 @@ class Music_list:
     scroll_sound = pygame.mixer.Sound('music/text_type.wav')
     title = pygame.mixer.Sound('music/home.mp3')
     intro = pygame.mixer.Sound("music/intro.mp3")
-    chill = pygame.mixer.Sound("music/chill.mp3")
-    scary = pygame.mixer.Sound("music/scary.mp3")
+    chill = pygame.mixer.Sound("music/intro.mp3") # change back
+    scary = pygame.mixer.Sound("music/intro.mp3") # change back
     write = pygame.mixer.Sound("music/write.mp3")
     suprise = pygame.mixer.Sound("music/suprise.mp3")
     final = pygame.mixer.Sound("music/final.mp3")
@@ -1221,7 +1244,7 @@ while running:
                     else:
                         pygame.quit()
 
-    if home_state == 0: # overwold state, map exploration  here 0.01 8
+    if home_state ==   0: # overwold state, map exploration  here 0.01 8
 
         if map_index != 0 and map_index != len(map_list) -1:
             battle_opt +=0.02
@@ -1238,7 +1261,7 @@ while running:
             if choice == 0:
                 pass
             else:
-                home_state = "combat"
+                
                 enemy_choice = randrange(0,3)
                 if enemy_choice == 0:
                     p1 = Combat('Hound',10,10,"scenes/battle_background.jpg")
@@ -1247,6 +1270,7 @@ while running:
                 if enemy_choice == 2:
                     p1 = Combat('Ignissus',10,10,"scenes/battle_background.jpg")
                 p1.rect_init()
+                home_state = "combat"
    
 
         for event in pygame.event.get():
@@ -1271,6 +1295,7 @@ while running:
             if ava_rect.colliderect(special_sprite_set.final_boss_rect):
                 p1 = Combat('Acalica',10,10,"scenes/battle_background.jpg")
                 p1.rect_init()
+                home_state = "combat"
     #places character
         screen.blit(ava,ava_rect)
 
@@ -1457,29 +1482,43 @@ while running:
 
     if home_state == "combat":
             # PUT COMBAT LOGIC HERE: YOU CAN REPLACE THE STUFF HERE
+        print(f"platofrmeing {inpos}")
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+                if event.type == pygame.QUIT:
+                    running = False
 
         try:
             if inpos == False:
                 p1.platform_blit()
-            elif home_state == 0:
+
+                pygame.mouse.set_visible(True)
+            elif home_state == 'combat':
+                p1.enter_combat()
+                print('blitting')
+            if home_state == 0:
                 if win:
                     outcome = True
                 elif loss:
                     outcome = False
                 print(outcome)
-                pygame.mouse.set_visible(True)
-            elif home_state == "combat":
-                p1.enter_combat()
-                print('blitting')
+                print("end game!!")
+                win = False
+                loss = False
+                inpos = False
             
         except:
             pass
+
     pygame.display.flip()
 
     clock.tick(60)  # limits FPS to 60
 
 pygame.quit()
 
+'''
+when doing attack, combat gets stuck in infinite loop of continuing attack, until enemy dies, indefinetely.
+Fix win and loss states>
+After defeating final boss, ending scene should play # fixed 
+combat start animation doesent occur after the first time, inpos == True   # fixed
+
+'''

@@ -328,7 +328,7 @@ class Combat():
             self.avaX, self.avaY = self.PP_rect.x, self.PP_rect.y
 
     def enter_combat(self):
-        global home_state, win, loss
+        global home_state, win, loss #????????????????????????????
         screen.blit(self.BG,(0,0))
         screen.blit(self.player_platform, self.PP_rect)
         screen.blit(self.enemy_platform, self.EP_rect)
@@ -811,7 +811,7 @@ class Combat():
 
 
 #enemy name (enemies to fight are listed above in the class), enemyLVL, playerLVL, BG file
-p1 = Combat('Brute', 10, 10, 'scenes/battle_background.jpg')
+p1 = Combat('Hound', 10, 10, 'scenes/battle_background.jpg')
 p1.rect_init()
 
 inpos = False
@@ -830,8 +830,10 @@ while running:
         elif home_state == 0:
             if win:
                 outcome = True
+                win = False
             elif loss:
                 outcome = False
+                loss = False
             print(outcome)
             pygame.mouse.set_visible(True)
         elif home_state == 'combat':
@@ -845,3 +847,5 @@ while running:
     clock.tick(60)
     pygame.display.update()
 pygame.quit()
+
+
