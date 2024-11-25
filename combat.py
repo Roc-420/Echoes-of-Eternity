@@ -453,18 +453,9 @@ class Combat():
 #----------------------------------------------------------------------------------------------------------------
         screen.blit(self.cursor, self.mouse_rect)
 
-
-
-
-
-
-
-
-
-
-#enemy name (enemies to fight are listed above in the class), enemyLVL, playerLVL, BG file
 p1 = Combat('hound', 10, 10, 'scenes/battle_background.jpg')
 p1.rect_init()
+
 
 inpos = False
 running = True

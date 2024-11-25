@@ -7,12 +7,12 @@ from colorama import Back,Style,Fore
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
-running = True
+suprise_opt = True
 test_font = pygame.font.Font('font/Pixeltype.ttf',155)
 test_font_1 = pygame.font.Font('font/Pixeltype.ttf',139)
 other_text_font = pygame.font.Font('font/Pixeltype.ttf',34)
 text_box_timer = 0
-
+suprise_counter = 0
 from logue import dialogue
 Screen_W,Screen_H = 1280,720
 
@@ -50,6 +50,8 @@ end_state = 0
 ava_right,ava_left, ava_up, ava_down, last_idle, ava, ava_idle_left, ava_idle_right =load_ava()
 index = 0
 trans_timer  = 0
+intro = 0
+
 
 def collide_check(player_rect,wall_rect_list,directions):
     if directions == "right":
@@ -113,8 +115,6 @@ def home_screen():
     title_screen()
     
     if home_screen_text == 0:
-        scroll = pygame.mixer.Sound('music/text_type.wav')
-        scroll.play(0) 
         text_generator(title_text,(640,110))
         
     else:
@@ -122,6 +122,435 @@ def home_screen():
         text_rect = text_surface.get_rect(midbottom = (640,110))
         screen.blit(text_surface,text_rect)
     
+Screen_W, Screen_H = 1280, 720
+screen = pygame.display.set_mode((Screen_W, Screen_H))
+
+inpos = False
+running = True
+
+class Combater():
+    def __init__(self, enemy, enemylvl, clvl, BGLOAD): #enemy being fought, Clvl - current level,
+        self.BGLOAD = BGLOAD
+        self.enemy = enemy
+        self.enemylvl = enemylvl
+        self.clvl = clvl
+
+        self.enemy_multiplier = 1
+        self.multiplier = 1
+
+        #Name, HP (to be multiplied by level), moves
+        
+        self.hound_moves = {'Tackle':5, 'Bite':10}
+        self.hound = ['Hound', 20, self.hound_moves]
+
+        self.brute_moves = {'Smash':15, 'Charge':0}
+        self.brute = ['Brute', 30, self.brute_moves]
+
+        self.enemies = [self.hound, self.brute]
+        
+        for i in self.enemies:
+            if self.enemy == i[0]:
+                self.enemy = i
+        print(self.enemy)
+
+        self.HP = 20*int(self.clvl)
+        self.current_HP = self.HP
+
+        self.enemy_HP = 100 #int(self.enemy[1])*self.enemylvl      -    FIGURE OUT HOW TO GET SECOND ITEM IN THE LIST
+        self.current_eHP = self.enemy_HP
+
+
+        self.click = 0
+        self.buttons = 'menu'
+
+    def rect_init(self):
+        self.BG = pygame.image.load(self.BGLOAD)
+        self.BG = pygame.transform.scale(self.BG,(Screen_W, Screen_H))
+        screen.blit(self.BG,(0,0))
+
+        #platforms
+
+        self.player_platform = pygame.image.load('scenes/Battle_platform.png')
+        self.PPX = -300
+        self.PPY = 500
+        self.enemy_platform = pygame.image.load('scenes/Battle_platform.png')
+        self.EPX = Screen_W+600
+        self.EPY = 525
+
+        
+        self.PP_rect = self.player_platform.get_rect(center = (self.PPX,self.PPY))
+        self.player_platform.set_colorkey('White')
+
+        self.EP_rect = self.enemy_platform.get_rect(center = (self.EPX,self.EPY))
+        self.enemy_platform = pygame.transform.scale(self.enemy_platform, (500,500))
+        self.enemy_platform.set_colorkey('White')
+
+        #ava sprite
+
+        self.ava_idle_right = pygame.image.load('Ava/Ava_idle_right.png')
+
+        self.avaX, self.avaY = 250,400
+
+        self.ava_combat_rect = self.ava_idle_right.get_rect(center = (self.avaX,self.avaY))
+        self.ava_idle_right = pygame.transform.scale(self.ava_idle_right, (200,250))
+        self.ava_idle_right.set_colorkey('White')
+
+        #mouse and buttons
+
+        self.cursor = pygame.image.load('GUI/cursor.png')
+        self.mouse_pos = pygame.mouse.get_pos()
+        self.mouse_rect = pygame.Rect(0, 0, 25, 25)
+        self.cursor = pygame.transform.scale(self.cursor, (50,75))
+
+        #Healthbars
+
+        self.player_ratio = (575/100)*((self.current_HP/self.HP)*100)
+        self.enemy_ratio = (575/100)*((self.current_eHP/self.enemy_HP)*100)
+
+        self.player_red_rect = pygame.Rect(25, Screen_H-75, 575, 50)
+        self.player_green_rect = pygame.Rect(25, Screen_H-75, self.player_ratio, 50)
+
+        self.enemy_red_rect = pygame.Rect(Screen_W-600, 25, 575, 50)
+        self.enemy_green_rect = pygame.Rect(Screen_W-600, 25, self.enemy_ratio, 50)
+#------------------------------------------------------------------------------------
+        #menu buttons
+        self.x1, self.y1 = 1300, 425
+        self.endx1, self.endy1 = 800, 425
+        self.col1 = ('Green')
+        self.button1_rect = pygame.Rect(self.x1, self.y1, 400, 75)
+
+        self.x2, self.y2 = 1300, 525
+        self.endx2, self.endy2 = 800, 525
+        self.col2 = ('Green')
+        self.button2_rect = pygame.Rect(self.x2, self.y2, 400, 75)
+
+        self.x3, self.y3 = 1300, 625
+        self.endx3, self.endy3 = 800, 625
+        self.col3 = ('Green')
+        self.button3_rect = pygame.Rect(self.x3, self.y3, 400, 75)
+
+        #fight buttons
+
+        self.x4, self.y4 = 800, 450
+        self.endx4, self.endy4 = 800,450
+        self.col4 = ('Green')
+        self.button4_rect = pygame.Rect(self.x4, self.y4, 100, 125)
+
+        self.x5, self.y5 = 950, 450
+        self.endx5, self.endy5 = 950, 450
+        self.col5 = ('Green')
+        self.button5_rect = pygame.Rect(self.x5, self.y5, 100, 125)
+
+        self.x6, self.y6 = 1100, 450
+        self.endx6, self.endy6 = 1100, 450
+        self.col6 = ('Green')
+        self.button6_rect = pygame.Rect(self.x6, self.y6, 100, 125)
+
+        self.x7, self.y7 = 800, 600
+        self.endx7, self.endy7 = 800, 600
+        self.col7 = ('Green')
+        self.button7_rect = pygame.Rect(self.x7, self.y7, 400, 65)
+        
+        #ava attacks
+
+        self.x8, self.y8 = 825, 500
+        self.endx8, self.endy8 = 800, 500
+        self.col8 = ('Green')
+        self.button8_rect = pygame.Rect(self.x8, self.y8, 100, 65)
+
+        self.x9, self.y9 = 950, 450
+        self.endx9, self.endy9 = 925, 450
+        self.col9 = ('Green')
+        self.button9_rect = pygame.Rect(self.x9, self.y9, 100, 65)
+
+        self.x10, self.y10 = 1075, 500
+        self.endx10, self.endy10 = 1000, 500
+        self.col10 = ('Green')
+        self.button10_rect = pygame.Rect(self.x10, self.y10, 100, 65)
+
+        self.x11, self.y11 = 825, 600
+        self.endx11, self.endy11 = 800, 600
+        self.col11 = ('Green')
+        self.button11_rect = pygame.Rect(self.x11, self.y11, 350, 65)
+
+
+
+
+
+
+
+
+        #items buttons
+
+
+        #misc
+
+        pygame.mouse.set_visible(False)
+        self.buttons = 'menu'
+        self.count = False
+        self.counter = 0
+
+        
+    def platform_blit(self):
+        global inpos
+        print(self.EPX, self.EPY)
+        screen.blit(self.BG,(0,0))
+        self.slide = 20
+        self.slide2 = 20
+        
+        if self.PP_rect.x >= -70:
+            inpos = True
+            pass
+        else:
+            self.PP_rect.x += self.slide
+            self.slide/4
+            inpos = False
+
+        if self.EP_rect.x <= Screen_W-500:
+            inpos2 = True
+            pass
+        else:
+            self.EP_rect.x -= self.slide2
+            self.slide2/4
+            inpos2 = False
+        
+        screen.blit(self.player_platform, self.PP_rect)
+        screen.blit(self.enemy_platform, self.EP_rect)
+        if inpos:
+            self.avaX, self.avaY = self.PP_rect.x, self.PP_rect.y
+
+    def enter_combat(self):
+        screen.blit(self.BG,(0,0))
+        screen.blit(self.player_platform, self.PP_rect)
+        screen.blit(self.enemy_platform, self.EP_rect)
+
+        screen.blit(self.ava_idle_right,(self.ava_combat_rect))
+        
+        #buttons
+        self.mouse_pos = pygame.mouse.get_pos()
+        self.mouse_rect.center = self.mouse_pos
+
+        if event.type == pygame.MOUSEBUTTONUP:
+                self.click += 1
+                print(self.click)
+
+        self.player_ratio = (575/100)*((self.current_HP/self.HP)*100)
+        self.enemy_ratio = (575/100)*((self.current_eHP/self.enemy_HP)*100)
+
+        self.player_red_rect = pygame.Rect(25, Screen_H-75, 575, 50)
+        self.player_green_rect = pygame.Rect(25, Screen_H-75, self.player_ratio, 50)
+
+        self.enemy_red_rect = pygame.Rect(Screen_W-600, 25, 575, 50)
+        self.enemy_green_rect = pygame.Rect(Screen_W-600, 25, self.enemy_ratio, 50)
+
+        pygame.draw.rect(screen, ('Red'), self.player_red_rect)
+        pygame.draw.rect(screen, ('Green'), self.player_green_rect)
+        pygame.draw.rect(screen, ('Red'), self.enemy_red_rect)
+        pygame.draw.rect(screen, ('Green'), self.enemy_green_rect)
+
+        if self.count:
+            self.counter -=1
+            if self.counter == 0:
+                self.count = False
+        
+        if self.current_HP > self.HP:
+            self.current_HP = self.HP
+
+        if self.current_eHP > self.enemy_HP:
+            self.current_eHP = self.enemy_HP
+                
+
+#-----------------------------------------------------------------------------
+                #Action Select
+        if self.buttons == 'menu':
+            pygame.draw.rect(screen, self.col1, self.button1_rect)
+            pygame.draw.rect(screen, self.col2, self.button2_rect)
+            pygame.draw.rect(screen, self.col3, self.button3_rect)
+            if self.x1 != self.endx1:
+                self.x1 -=25
+                self.x2 -=25
+                self.x3 -=25
+            self.button1_rect = pygame.Rect(self.x1, self.y1, 400, 75)
+            self.button2_rect = pygame.Rect(self.x2, self.y2, 400, 75)
+            self.button3_rect = pygame.Rect(self.x3, self.y3, 400, 75)
+
+
+                                                                    #FIGHT BUTTON
+            if self.mouse_rect.colliderect(self.button1_rect):
+                self.col1 = ('Yellow')
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.col1 = ('Red')
+                    self.click = -1
+                elif self.click == 1:
+                    self.click += 1
+                    self.buttons = 'fight'
+            else: 
+                self.col1 = ('Green')
+                                                                    #ITEMS BUTTON
+            if self.mouse_rect.colliderect(self.button2_rect):
+                self.col2 = ('Yellow')
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.col2 = ('Red')
+                    self.click = 0
+                elif self.click == 1:
+                    pass#######################
+            else: 
+                self.col2 = ('Green')
+                                                                    #ESCAPE BUTTON
+            if self.mouse_rect.colliderect(self.button3_rect):
+                self.col3 = ('Yellow')
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.col3 = ('Red')
+                    self.click = 0
+                elif self.click == 1:
+                    pass#######################
+            else: 
+                self.col3 = ('Green')
+                
+#----------------------------------------------------------------------------
+                #Character Select
+        if self.buttons == 'fight':
+            
+            pygame.draw.rect(screen, self.col4, self.button4_rect)
+            pygame.draw.rect(screen, self.col5, self.button5_rect)
+            pygame.draw.rect(screen, self.col6, self.button6_rect)
+            pygame.draw.rect(screen, self.col7, self.button7_rect)
+            if self.mouse_rect.colliderect(self.button4_rect):
+                self.col4 = ('Yellow')
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.col4 = ('Red')
+                    self.click = 0
+                elif self.click == 1:
+                    self.click += 1
+                    self.buttons = 'ava'           #Ava Select
+            else: 
+                self.col4 = ('Green')
+
+            if self.mouse_rect.colliderect(self.button5_rect):
+                self.col5 = ('Yellow')
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.col5 = ('Red')
+                    self.click = 0
+                elif self.click == 1:
+                    self.click += 1
+                                                    #Edward Select
+            else: 
+                self.col5 = ('Green')
+
+            if self.mouse_rect.colliderect(self.button6_rect):
+                self.col6 = ('Yellow')
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.col6 = ('Red')
+                    self.click = 0
+                elif self.click == 1:
+                    self.click += 1
+                                                    #Robot Select
+            else: 
+                self.col6 = ('Green')
+
+            if self.mouse_rect.colliderect(self.button7_rect):
+                self.col7 = ('Yellow')
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.col7 = ('Red')
+                    self.click = 0
+                elif self.click == 1:
+                    self.buttons = 'menu'
+                                                    #Back Button
+            else: 
+                self.col7 = ('Green')
+#-------------------------------------------------------------------------
+                #AVA'S MOVES
+        if self.buttons == 'ava':
+            
+            pygame.draw.rect(screen, self.col8, self.button8_rect)
+            pygame.draw.rect(screen, self.col9, self.button9_rect)
+            pygame.draw.rect(screen, self.col10, self.button10_rect)
+            pygame.draw.rect(screen, self.col11, self.button11_rect)
+
+            #Attack 1
+            if self.mouse_rect.colliderect(self.button8_rect):
+                self.col8 = ('Yellow')
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.col8 = ('Red')
+                    self.click = 0
+                elif self.click == 1:
+                    self.click += 1
+                    self.current_HP += 100
+                    self.damage = 3*self.clvl
+                    print(self.current_eHP)
+                    #
+                    #
+                    #
+                    #
+                    #
+                    self.buttons = 'enemyturn' #THIS SECTION HERE WILL ATTACK THE ENEMY
+            else:
+                self.col8 = ('Green')
+
+            #Attack 2
+            if self.mouse_rect.colliderect(self.button9_rect):
+                self.col9 = ('Yellow')
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.col9 = ('Red')
+                    self.click = 0
+                elif self.click == 1:
+                    self.click += 1
+                    self.damage = 5*self.clvl # Damage
+                    print(self.current_eHP)
+                    #
+                    #
+                    #
+                    #
+                    #
+                    self.buttons = 'enemyturn' #THIS SECTION HERE WILL ATTACK THE ENEMY
+            else:
+                self.col9 = ('Green')
+
+            #Attack 3
+            if self.mouse_rect.colliderect(self.button10_rect):
+                self.col10 = ('Yellow')
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.col10 = ('Red')
+                    self.click = 0
+                elif self.click == 1:
+                    self.click += 1
+                    print(self.current_eHP)
+                    #
+                    #
+                    #
+                    #
+                    #
+                    self.buttons = 'enemyturn' #THIS SECTION HERE WILL ATTACK THE ENEMY
+            else:
+                self.col10 = ('Green')
+
+            #Back Button
+            if self.mouse_rect.colliderect(self.button11_rect):
+                self.col11 = ('Yellow')
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.col11 = ('Red')
+                    self.click = 0
+                elif self.click == 1:
+                    self.click += 1
+                    print(self.current_eHP)
+                    self.buttons = 'fight'
+            else:
+                self.col11 = ('Green')
+
+        if self.buttons == 'enemyturn':
+            # player attack animation here
+            self.current_eHP -= self.damage
+            # enemy choose attack here
+            # enemy attack animation here
+            self.current_HP -= 10 # enemy damage
+            #lose check
+            #win check
+            self.buttons = 'menu'
+#----------------------------------------------------------------------------------------------------------------
+        screen.blit(self.cursor, self.mouse_rect)
+
+p1 = Combater('hound', 10, 10, 'scenes/battle_background.jpg')
+p1.rect_init()
 
     
 #pygame.display.toggle_fullscreen()
@@ -130,7 +559,7 @@ ava = last_idle
 ava_start_list = ["400,600","750,630","800,600","800,600","800,600","500,600","500,600","500,600","540,590","880,300","545,600","545,600","545,600","545,600","1100,600","700,600","600,600"]
 text_timer = 0
 map_list = ["maps/map.txt", "maps/map1.5.txt" , "maps/map3.txt", "maps/map3.5.txt", "maps/map3.6.txt"  , "maps/map4.txt",  "maps/4.5.txt","maps/map5.txt", "maps/map5.1.txt","maps/map5.2.txt", "maps/map5.3.txt", "maps/map5.4.txt", "maps/map5.5.txt", "maps/map6.txt","maps/map6.1.txt","maps/map6.2.txt","maps/map6.3.txt"]
-map_index = 0
+map_index = 8
 tile_lister = ["1","1","1","1","1","1","1","2" ,"2" ,"2" ,"2"   ,"2","2","3","3","3","3"]
 x,y = ava_start_list[map_index].split(",")
 x,y = int(x),int(y)
@@ -138,6 +567,7 @@ avaX,avaY = x,y
 ava_rect = ava.get_rect(center = (avaX,avaY))
 ava_rect = ava.get_rect(center = (avaX,avaY))
 ava.set_colorkey('White') 
+opening = pygame.image.load("scenes/sky.png")
 
 class tile_set_1:
     ice = pygame.image.load("tiles/ground3.png").convert_alpha()
@@ -191,8 +621,12 @@ class tile_set_3:
 class Music_list:
     scroll_sound = pygame.mixer.Sound('music/text_type.wav')
     title = pygame.mixer.Sound('music/home.mp3')
+    intro = pygame.mixer.Sound("music/intro.mp3")
     chill = pygame.mixer.Sound("music/chill.mp3")
     scary = pygame.mixer.Sound("music/scary.mp3")
+    write = pygame.mixer.Sound("music/write.mp3")
+    suprise = pygame.mixer.Sound("music/suprise.mp3")
+    suprise.set_volume(4)
     playlist = [chill,chill,chill,chill,chill,chill,chill     ,scary,scary,scary,scary,scary,scary,scary,scary,scary,scary]
     
 class special_sprite_set:
@@ -371,21 +805,30 @@ while running:
                     select = pygame.mixer.Sound('music/select.mp3')
                     select.play(0)
                     if start_state == 1:
-                        screen.fill("Black")
+                        screen.blit(opening,(0,0))
+                        Music_list.write.play(-1)
                         home_state = "dialogue"
                         dialogue_timer = 0
-                        dialogue_str = " In a distant universe, where peace has long been forgetton, and humankind are haunted by the disturbing creations of their ancestors, living lives of fear and paranoia, an unlikely meeting between two individuals would give it renewed hope and set the trajectory for the future of mankind..............................."
+                        dialogue_str = " In a distant universe, where peace has long been forgetton, and humankind are haunted by the disturbing creations of their ancestors, living lives of fear and paranoia, an unlikely meeting between two individuals would give it renewed hope and set the trajectory for its future..............................."
                         dialogue_list  = str_split(dialogue_str,180) 
                         Music_list.title.stop()
-                        Music_list.playlist[map_index].play(-1)
+                        Music_list.intro.play(-1)
+                        intro  = 1
+                        #Music_list.playlist[map_index].play(-1)
                     
                         
                     else:
                         pygame.quit()
 
-    if home_state == 0: # overwold state, map exploration  here
+    if home_state == 0: # overwold state, map exploration  here 0.01 8
         #battle_opt +=0.02
-        if int(battle_opt) >= 5:
+        if map_index == 8:
+            suprise_counter +=0.02
+        if int(suprise_counter) >=6 and suprise_opt == True:
+            suprise_opt = False
+            Music_list.suprise.play(0)
+            suprise_counter = 0
+        if int(battle_opt) >= 4:
             battle_opt = 0
             choice = randrange(0,2)
             if choice == 0:
@@ -450,7 +893,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="left"):
                 pass
             else:
-                avaX -=5
+                avaX -=1
             
             key = True 
             direction = 'left'
@@ -459,7 +902,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="right"):
                 pass
             else:
-                avaX +=5
+                avaX +=1
             key = True
             direction = 'right'
         elif keys[pygame.K_w]:
@@ -467,13 +910,14 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="up"):
                 pass
             else:
-                avaY -=5
+                avaY -=1
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="up") in special_lists and keys[pygame.K_SPACE]:
                 home_state = "dialogue"
                 dialogue_timer = 0
                 dialogue_option = special_lists.index(collide_check(ava_rect,wall_rect_list=wall_list,directions="up"))
                 dialogue_str = dialogue.final_list[map_index][dialogue_option]
-                dialogue_list  = str_split(dialogue_str,180) 
+                dialogue_list  = str_split(dialogue_str,180)
+                Music_list.write.play(-1)
                 
         
             key = True
@@ -483,7 +927,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="down"):
                 pass
             else:
-                avaY +=5
+                avaY +=1
             key = True
             direction = 'down'
         
@@ -515,7 +959,12 @@ while running:
                     text_box_timer +=1
 
                 elif event.key == pygame.K_SPACE:
+                    if intro == 1:
+                        Music_list.intro.stop()
+                        Music_list.playlist[map_index].play(-1)
+                        intro = 0
                     pygame.time.wait(30)
+                    Music_list.write.stop()
                     home_state = 0
                     text_box_timer = 0
 
@@ -548,7 +997,7 @@ while running:
 
             
             if int(dialogue_timer) <= 60 or int(dialogue_timer) >=60:
-                Music_list.scroll_sound.play(0)
+                
                 if len(temp_text) < 60:
                     text_1 = temp_text
                 else:
@@ -578,11 +1027,17 @@ while running:
 
     if home_state == "combat":
         # PUT COMBAT LOGIC HERE: YOU CAN REPLACE THE STUFF HERE
-        screen.fill("Pink")
         for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    home_state = 0
+            if event.type == pygame.QUIT:
+                running = False
+
+        try:
+            if inpos == False:
+                p1.platform_blit()
+            else:
+                p1.enter_combat()
+        except:
+            pass
     pygame.display.flip()
 
     clock.tick(60)  # limits FPS to 60
