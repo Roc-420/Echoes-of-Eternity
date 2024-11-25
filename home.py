@@ -13,6 +13,7 @@ test_font_1 = pygame.font.Font('font/Pixeltype.ttf',139)
 other_text_font = pygame.font.Font('font/Pixeltype.ttf',34)
 Battle_text = pygame.font.Font('font/Pixeltype.ttf',50)
 
+
 text_box_timer = 0
 suprise_counter = 0
 from logue import dialogue
@@ -975,13 +976,13 @@ class Combat():
         
 
 
-#pygame.display.toggle_fullscreen()
+#pygame.display.toggle_fullscreen() the G.O.A.T
 
 ava = last_idle
 ava_start_list = ["400,600","750,630","800,600","800,600","800,600","500,600","500,600","500,600","540,590","880,300","545,600","545,600","545,600","545,600","1100,600","700,600","600,600"]
 text_timer = 0
 map_list = ["maps/map.txt", "maps/map1.5.txt" , "maps/map3.txt", "maps/map3.5.txt", "maps/map3.6.txt"  , "maps/map4.txt",  "maps/4.5.txt","maps/map5.txt", "maps/map5.1.txt","maps/map5.2.txt", "maps/map5.3.txt", "maps/map5.4.txt", "maps/map5.5.txt", "maps/map6.txt","maps/map6.1.txt","maps/map6.2.txt","maps/map6.3.txt"]
-map_index = 16
+map_index = 0
 tile_lister = ["1","1","1","1","1","1","1","2" ,"2" ,"2" ,"2"   ,"2","2","3","3","3","3"]
 x,y = ava_start_list[map_index].split(",")
 x,y = int(x),int(y)
@@ -1247,7 +1248,7 @@ while running:
     if home_state ==   0: # overwold state, map exploration  here 0.01 8
 
         if map_index != 0 and map_index != len(map_list) -1:
-            battle_opt +=0.02
+            battle_opt +=0.0 # fux
             pass
         if map_index == 8:
             suprise_counter +=0.02
@@ -1482,7 +1483,6 @@ while running:
 
     if home_state == "combat":
             # PUT COMBAT LOGIC HERE: YOU CAN REPLACE THE STUFF HERE
-        print(f"platofrmeing {inpos}")
         for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -1497,10 +1497,15 @@ while running:
                 print('blitting')
             if home_state == 0:
                 if win:
+                    print("win!!!1")
                     outcome = True
                 elif loss:
+                    if map_index >=2:
+                        map_index =2
+                    else:
+                        map_index -=2                    
                     outcome = False
-                print(outcome)
+                
                 print("end game!!")
                 win = False
                 loss = False
@@ -1521,4 +1526,8 @@ Fix win and loss states>
 After defeating final boss, ending scene should play # fixed 
 combat start animation doesent occur after the first time, inpos == True   # fixed
 
+other changes:
+revert walking speed and combat encounter rate to normal
+change themes to normal files(chill and scary)
 '''
+""

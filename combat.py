@@ -28,8 +28,10 @@ clock = pygame.time.Clock()
 
 pygame.init()
 Screen_W, Screen_H = 1280, 720
-screen = pygame.display.set_mode((Screen_W, Screen_H))
 
+
+pygame.display.toggle_fullscreen()
+screen = pygame.display.set_mode((Screen_W, Screen_H))
 
 other_text_font = pygame.font.Font('font/Pixeltype.ttf',34)
 Battle_text = pygame.font.Font('font/Pixeltype.ttf',50)
@@ -49,7 +51,7 @@ class Combat():
         self.hound_moves = {'Tackle':2, 'Bite':5}
         self.hound = ['Hound', 20, self.hound_moves, 'enemy/Hound.png', (925, 285), (250,125)]
 
-        self.acalica_moves = {'Beam':11, 'Charge':2}
+        self.acalica_moves = {'Beam':11, 'Aura':20, 'Charge':2}
         self.acalica = ['Acalica', 35, self.acalica_moves, 'enemy/Acalica.png', (975, 175), (300,275)]
 
         self.bitumen_moves = {'Sludge':2, 'Charge':0}
@@ -697,7 +699,7 @@ class Combat():
                     self.click = 0
                 elif self.click == 1:
                     self.click += 1
-                    self.enemy_multiplier = self.enemy_multiplier/2
+                    self.enemy_multiplier = (self.enemy_multiplier/4)*3
                     self.damage = 0
                     #
                     #
@@ -811,7 +813,7 @@ class Combat():
 
 
 #enemy name (enemies to fight are listed above in the class), enemyLVL, playerLVL, BG file
-p1 = Combat('Hound', 10, 10, 'scenes/battle_background.jpg')
+p1 = Combat('Acalica',10,10,"scenes/battle_background.jpg")
 p1.rect_init()
 
 inpos = False
@@ -819,29 +821,46 @@ running = True
 home_state = "combat"
 win = False
 loss = False
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
 
-    try:
-        if inpos == False:
-            p1.platform_blit()
-        elif home_state == 0:
-            if win:
-                outcome = True
+
+pygame.display.toggle_fullscreen()
+
+while running:
+    if home_state== 0:
+        pygame.quit()
+    if home_state == "combat":
+            # PUT COMBAT LOGIC HERE: YOU CAN REPLACE THE STUFF HERE
+        for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+        try:
+            if inpos == False:
+                p1.platform_blit()
+
+                pygame.mouse.set_visible(True)
+            elif home_state == 'combat':
+                p1.enter_combat()
+                print('blitting')
+            if home_state == 0:
+                if win:
+                    print("win!!!1")
+                    outcome = True
+                elif loss:
+                    print("loss!!!")
+                    if map_index >=2:
+                        map_index =2
+                    else:
+                        map_index -=2                    
+                    outcome = False
+                
+                print("end game!!")
                 win = False
-            elif loss:
-                outcome = False
                 loss = False
-            print(outcome)
-            pygame.mouse.set_visible(True)
-        elif home_state == 'combat':
-           p1.enter_combat()
-           print('blitting')
-        
-    except:
-        pass
+                inpos = False
+            
+        except:
+            pass
 
 
     clock.tick(60)
