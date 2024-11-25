@@ -1250,7 +1250,7 @@ while running:
     if home_state ==   0: # overwold state, map exploration  here 0.01 8
 
         if map_index != 0 and map_index != len(map_list) -1:
-            battle_opt +=0.02 # fux
+            battle_opt +=0.01 # fux
             pass
         if map_index == 8:
             suprise_counter +=0.02
