@@ -977,8 +977,7 @@ class Combat():
         screen.blit(self.cursor, self.mouse_rect)
         
 
-
-pygame.display.toggle_fullscreen() 
+#pygame.display.toggle_fullscreen() 
 
 ava = last_idle
 ava_start_list = ["400,600","750,630","800,600","800,600","800,600","500,600","500,600","500,600","540,590","880,300","545,600","545,600","545,600","545,600","1100,600","700,600","600,600"]
@@ -1427,59 +1426,59 @@ while running:
                     text_box_timer = 0
 
     
+        if home_state == "dialogue":
+            current_dialogue = dialogue_list[text_box_timer]
+            if int(dialogue_timer) == len(dialogue_str) +1:
+                pass
 
-        current_dialogue = dialogue_list[text_box_timer]
-        if int(dialogue_timer) == len(dialogue_str) +1:
-            pass
+            else:
+                temp_text = current_dialogue[: int(dialogue_timer)]
 
-        else:
-            temp_text = current_dialogue[: int(dialogue_timer)]
-
-            
-            
-            
-            
-            dialogue_timer +=0.2
-            # background rectange
-            back_txt = "2" * 65
-            back_txt_py = other_text_font.render(back_txt,False,"Black")
-            back_bg_1 = back_txt_py.get_rect(midbottom = (640,40))
-            back_bg_1 = back_bg_1.inflate(30,20)
-            back_bg_2 = back_txt_py.get_rect(midbottom = (640,80))
-            back_bg_2 =  back_bg_2.inflate(30,20)
-            back_bg_3 = back_txt_py.get_rect(midbottom = (640,120))
-            back_bg_3 = back_bg_3.inflate(30,20)
-            
-            #pygame.draw.rect(screen,"Black",back_txt_rect)
-
-
-            
-            if int(dialogue_timer) <= 60 or int(dialogue_timer) >=60:
                 
-                if len(temp_text) < 60:
-                    text_1 = temp_text
-                else:
-                    text_1 = current_dialogue[: 60]
-                dialogue_game = other_text_font.render(text_1,False,"White")
-                dialogue_rect = dialogue_game.get_rect(midbottom = (640,40))
-                pygame.draw.rect(screen,"Black",back_bg_1)
-                screen.blit(dialogue_game,dialogue_rect)
-            if int(dialogue_timer) > 60:
-                if int(dialogue_timer) < 120:
-                    text_2 = current_dialogue[60 : int(dialogue_timer)]
-                else:
-                    text_2 = current_dialogue[60: 120]
-                text_2 = other_text_font.render(text_2,False,"White")
-                dialogue_rect_2 = dialogue_game.get_rect(midbottom = (640,80))
-                pygame.draw.rect(screen,"Black",back_bg_2)
-                screen.blit(text_2,dialogue_rect_2)
-            
-            if int(dialogue_timer) > 120:
-                text_3 = current_dialogue[120: int(dialogue_timer)]
-                text_3 = other_text_font.render(text_3,False,"White")
-                dialogue_rect_3 = dialogue_game.get_rect(midbottom = (640,120))
-                pygame.draw.rect(screen,"Black",back_bg_3)
-                screen.blit(text_3,dialogue_rect_3)
+                
+                
+                
+                dialogue_timer +=0.2
+                # background rectange
+                back_txt = "2" * 65
+                back_txt_py = other_text_font.render(back_txt,False,"Black")
+                back_bg_1 = back_txt_py.get_rect(midbottom = (640,40))
+                back_bg_1 = back_bg_1.inflate(30,20)
+                back_bg_2 = back_txt_py.get_rect(midbottom = (640,80))
+                back_bg_2 =  back_bg_2.inflate(30,20)
+                back_bg_3 = back_txt_py.get_rect(midbottom = (640,120))
+                back_bg_3 = back_bg_3.inflate(30,20)
+                
+                #pygame.draw.rect(screen,"Black",back_txt_rect)
+
+
+                
+                if int(dialogue_timer) <= 60 or int(dialogue_timer) >=60:
+                    
+                    if len(temp_text) < 60:
+                        text_1 = temp_text
+                    else:
+                        text_1 = current_dialogue[: 60]
+                    dialogue_game = other_text_font.render(text_1,False,"White")
+                    dialogue_rect = dialogue_game.get_rect(midbottom = (640,40))
+                    pygame.draw.rect(screen,"Black",back_bg_1)
+                    screen.blit(dialogue_game,dialogue_rect)
+                if int(dialogue_timer) > 60:
+                    if int(dialogue_timer) < 120:
+                        text_2 = current_dialogue[60 : int(dialogue_timer)]
+                    else:
+                        text_2 = current_dialogue[60: 120]
+                    text_2 = other_text_font.render(text_2,False,"White")
+                    dialogue_rect_2 = dialogue_game.get_rect(midbottom = (640,80))
+                    pygame.draw.rect(screen,"Black",back_bg_2)
+                    screen.blit(text_2,dialogue_rect_2)
+                
+                if int(dialogue_timer) > 120:
+                    text_3 = current_dialogue[120: int(dialogue_timer)]
+                    text_3 = other_text_font.render(text_3,False,"White")
+                    dialogue_rect_3 = dialogue_game.get_rect(midbottom = (640,120))
+                    pygame.draw.rect(screen,"Black",back_bg_3)
+                    screen.blit(text_3,dialogue_rect_3)
 
 
 
@@ -1523,7 +1522,7 @@ while running:
 
     pygame.display.flip()
 
-    clock.tick(60)  # limits FPS to 60
+    clock.tick(200)  # limits FPS to 60
 
 pygame.quit()
 
