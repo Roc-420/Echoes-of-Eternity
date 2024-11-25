@@ -280,7 +280,7 @@ class Combat():
         self.win_check = False
         self.Ultimate = False
         self.charge = 0
-        self.block = False
+        self.stun = 0
 
         self.end = False
         self.match = False
@@ -512,6 +512,10 @@ class Combat():
             #pygame.draw.rect(screen, self.col11, self.button11_rect)
             screen.blit(self.back_surf, self.button11_rect)
 
+
+            self.ult_count = other_text_font.render(f'{self.ult_check}/5', False, (255,255,255))
+            screen.blit(self.ult_count, (958,Screen_H-200))
+          
             #Attack 1
             if self.mouse_rect.colliderect(self.button8_rect):
                 self.col8 = ('Yellow')
@@ -520,7 +524,7 @@ class Combat():
                     self.click = 0
                 elif self.click == 1:
                     self.click += 1
-                    self.block = True
+                    self.stun = 3
                     self.damage = 0
                     self.text = 'Ava Blocked the Attack and stunned the Opponent!'
                     #
@@ -724,7 +728,7 @@ class Combat():
                     self.ult_check = False
 
             self.battle = Battle_text.render(self.text, False, (255,255,255))
-            screen.blit(self.battle, (775,Screen_H-200))
+            screen.blit(self.battle, (750,Screen_H-200))
 
             if self.eTURN:
                 self.count = True
@@ -741,11 +745,13 @@ class Combat():
                 self.Eattack = random.choice(list(self.Emoves.values()))
                 #a = input()
                 #enemy attack animation here
-                if self.block:
+                self.stun -= 1
+                if self.stun <= 0:
+                    self.current_HP -= round(self.Eattack*self.enemy_multiplier*self.enemylvl)
+                elif self.stun == 1:
+                    pass
+                elif self.stun == 2:
                     self.current_HP -= round((self.Eattack*self.enemy_multiplier*self.enemylvl)/3) # enemy damage
-                else:
-                    self.current_HP -= round(self.Eattack*self.enemy_multiplier*self.enemylvl) # enemy damage
-                    self.block = False
                 print(self.enemy_multiplier)
                 self.charge = 0
                 
