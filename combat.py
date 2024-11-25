@@ -741,7 +741,7 @@ class Combat():
                     self.Ultimate = False
                     self.text = f'The Ultimate did {self.damage} damage with a multiplier of {self.charge}!'
                     self.eTURN = True
-                    self.ult_check = False
+                    self.ult_check = 0
 
             self.battle = Battle_text.render(self.text, False, (255,255,255))
             screen.blit(self.battle, (750,Screen_H-200))
