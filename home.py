@@ -978,7 +978,7 @@ class Combat():
         
 
 
-#pygame.display.toggle_fullscreen() the G.O.A.T
+pygame.display.toggle_fullscreen() 
 
 ava = last_idle
 ava_start_list = ["400,600","750,630","800,600","800,600","800,600","500,600","500,600","500,600","540,590","880,300","545,600","545,600","545,600","545,600","1100,600","700,600","600,600"]
@@ -1258,7 +1258,7 @@ while running:
             suprise_opt = False
             Music_list.suprise.play(0)
             suprise_counter = 0
-        if int(battle_opt) >= 4:
+        if int(battle_opt) >= 6:
             battle_opt = 0
             choice = randrange(0,2)
             if choice == 0:
@@ -1337,7 +1337,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="left"):
                 pass
             else:
-                avaX -=10
+                avaX -=2
             
             key = True 
             direction = 'left'
@@ -1346,7 +1346,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="right"):
                 pass
             else:
-                avaX +=10
+                avaX +=2
             key = True
             direction = 'right'
         elif keys[pygame.K_w]:
@@ -1354,7 +1354,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="up"):
                 pass
             else:
-                avaY -=10
+                avaY -=2
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="up") in special_lists and keys[pygame.K_SPACE]:
                 home_state = "dialogue"
                 dialogue_timer = 0
@@ -1371,7 +1371,7 @@ while running:
             if collide_check(ava_rect,wall_rect_list=wall_list,directions="down"):
                 pass
             else:
-                avaY +=10
+                avaY +=2
             key = True
             direction = 'down'
         
@@ -1501,10 +1501,16 @@ while running:
                     print("win!!!1")
                     outcome = True
                 elif loss:
+                    Music_list.playlist[map_index].stop()
                     if map_index >=2:
                         map_index =2
                     else:
-                        map_index -=2                    
+                        map_index -=2
+                    x,y = ava_start_list[map_index].split(",")
+                    x,y = int(x),int(y)
+                    avaX,avaY = x,y
+                    Music_list.playlist[map_index].play(-1)
+                                        
                     outcome = False
                 
                 print("end game!!")
@@ -1530,5 +1536,11 @@ combat start animation doesent occur after the first time, inpos == True   # fix
 other changes:
 revert walking speed and combat encounter rate to normal
 change themes to normal files(chill and scary)
+
+
+old code: from random import random
+new(fixed): import random
+
+
 '''
 ""
