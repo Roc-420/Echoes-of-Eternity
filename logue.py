@@ -6,7 +6,7 @@ class dialogue:
     # map 1 dialogue
     a0 = "........................"
     a1 = "........................"
-    a3 = """ What are you !(You look at him confused and shocked)   Oh, you're  human. To be honest, I've been waiting for this moment for quite some time. I don't remember when I last spoke to someone. There used to be whole village here. But all of them dissapeared. I'm the last one left. (You ask him what his future plans are). My plans? To get out of here before 'THEY' get me. Now that I think of it. That old factory might have some backup spaceships that can get us out of here. Would you mind coming with me to come get it?(You agree to his requests). It's up ahead. By the way, Whats that mark on your hand?(You claim you have no idea how you got it)  """
+    a3 = """ What are you !(You look at him confused)Oh, you're human. To be honest, I've been waiting for this moment for quite some time. I don't remember when I last spoke to someone. There used to be whole village here. But all of them dissapeared. I'm the last one left. (You ask him what his future plans are). My plans? To get out of here before 'THEY' get me. Now that I think of it. That old factory might have some backup spaceships that can get us out of here. Would you mind coming with me to come get it?(You agree to his requests). It's up ahead. By the way, Whats with that weird mark on your hand?(You claim you have no idea how you got it)  """
     list_1 = [a0,a1,a3]
     #----------------------------------------------------------------------------
     list2  = [""" Theres something cool I want to show you just up ahead"""]
@@ -40,7 +40,23 @@ class dialogue:
     list_16 = ["(You both hear loud noises that unsettle you) There's definitely something up ahead. Get ready to fight for your life."]
     #----------1111111111111111111111111111111111111111111111
     list_17 = ["this is the dialogue for list 17"]
+
+    end = "These individuals would later go on to be called heroes, but they still yet have a long way to go, and will curse fate countless times...........to be continued.........................Press the Spacebar to exit the game "
     final_list = [list_1,list2,list_3,list_4,list_5,list_6,list_7,list_8,list_9,list_10,list_11,list_12,list_13,list_14,list_15,list_16,list_17]
 
 
 
+"""
+if  map_index == len(map_list) and (win condition):
+    home_state = "end"
+
+elif (win_conditin):
+    home_state = 0
+
+elif (lose condition):
+    if map_index < 2:
+        map_index = 0
+    else:
+        map_index -=2
+
+"""

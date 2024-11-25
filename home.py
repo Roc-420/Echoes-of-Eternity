@@ -202,14 +202,9 @@ screen = pygame.display.set_mode((Screen_W, Screen_H))
 
 inpos = False
 running = True
-win = False
-loss = False
 
-
-
-
-class Combat():
-    def __init__(self, enemy, enemylvl, clvl, BGLOAD): #enemy being fought, Clvl - current level,x
+class Combater():
+    def __init__(self, enemy, enemylvl, clvl, BGLOAD): #enemy being fought, Clvl - current level,
         self.BGLOAD = BGLOAD
 
         self.enemylvl = enemylvl
@@ -220,20 +215,11 @@ class Combat():
 
         #Name, HP (to be multiplied by level), moves
         
-        self.hound_moves = {'Tackle':2, 'Bite':5}
-        self.hound = ['Hound', 20, self.hound_moves, 'enemy/Hound.png', (925, 285), (250,125)]
+        self.hound_moves = {'Tackle':5, 'Bite':10}
+        self.hound = ['Hound', 20, self.hound_moves]
 
-        self.acalica_moves = {'Beam':11, 'Charge':2}
-        self.acalica = ['Acalica', 35, self.acalica_moves, 'enemy/Acalica.png', (975, 175), (300,275)]
-
-        self.bitumen_moves = {'Sludge':2, 'Charge':0}
-        self.bitumen = ['Bitumen', 5, self.bitumen_moves, 'enemy/Bitumen.png', (975, 300), (125,100)]
-
-        self.ignissus_moves = {'Penetrate':2, 'Slashy':4}
-        self.ignissus = ['Ignissus', 8, self.ignissus_moves, 'enemy/Ignissus.png', (950, 225), (125,190)]
-
-
-        self.Eattack = 0
+        self.brute_moves = {'Smash':15, 'Charge':0}
+        self.brute = ['Brute', 30, self.brute_moves]
 
         self.enemies = [self.hound, self.acalica, self.bitumen, self.ignissus]
         
@@ -248,18 +234,9 @@ class Combat():
         self.enemy_HP = int(self.enemy[1])*self.enemylvl
         self.current_eHP = self.enemy_HP
 
-        self.enemy_sprite = pygame.image.load(self.enemy[3])
 
-        self.enemy_rect = self.enemy_sprite.get_rect(center = self.enemy[4])
-        self.enemy_sprite = pygame.transform.scale(self.enemy_sprite, self.enemy[5])
-        self.enemy_sprite.set_colorkey('White')
-        
-        self.Emoves = self.enemy[2]
-        print(self.Emoves)
-        self.eTURN = False
-        self.finish = False
-        self.ult_check = 0
-
+        self.click = 0
+        self.buttons = 'menu'
 
     def rect_init(self):
         self.BG = pygame.image.load(self.BGLOAD)
@@ -973,15 +950,6 @@ class Combat():
 #----------------------------------------------------------------------------------------------------------------
         pygame.mouse.set_visible(False)
         screen.blit(self.cursor, self.mouse_rect)
-        
-
-
-
-
-
-
-
-
 
     
 #pygame.display.toggle_fullscreen()

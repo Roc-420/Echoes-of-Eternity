@@ -816,7 +816,7 @@ p1.rect_init()
 
 inpos = False
 running = True
-home_state = 1
+home_state = "combat"
 win = False
 loss = False
 while running:
@@ -834,7 +834,7 @@ while running:
                 outcome = False
             print(outcome)
             pygame.mouse.set_visible(True)
-        elif home_state == 1:
+        elif home_state == 'combat':
            p1.enter_combat()
            print('blitting')
         
