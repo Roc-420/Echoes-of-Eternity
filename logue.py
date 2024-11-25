@@ -1,15 +1,16 @@
 
 
 """
-sign1 Walk around and explore, you'll find plenty of things. When finding an enemy you can fight it, By choosing one of the 3 party memebers you can deal damage, heal, buff/debuff, and charge your ultimate. If you lose you will be sent back 2 maps. Good luck on your adventure!
+sign1 Walk around and explore, you'll find plenty of things. When finding an enemy you can fight it, By choosing one of the 3 party members you can deal damage, heal, buff/debuff, and charge your ultimate. If you lose you will be sent back 2 maps. Good luck on your adventure!
 """
 
 class dialogue:
     # map 1 dialogue
     a0 = "........................"
     a1 = "........................"
+    sign = " Walk around and explore, you'll find plenty of things. When finding an enemy you can fight it, By choosing one of the 3 party members you can deal damage, heal, buff/debuff, and charge your ultimate. If you lose you will be sent back 2 maps. Good luck on your adventure!"
     a3 = """ What are you !(You look at him confused)Oh, you're human. To be honest, I've been waiting for this moment for quite some time. I don't remember when I last spoke to someone. There used to be whole village here. But all of them dissapeared. I'm the last one left. (You ask him what his future plans are). My plans? To get out of here before 'THEY' get me. Now that I think of it. That old factory might have some backup spaceships that can get us out of here. Would you mind coming with me to come get it?(You agree to his requests). It's up ahead. By the way, Whats with that weird mark on your hand?(You claim you have no idea how you got it)  """
-    list_1 = [a0,a1,a3]
+    list_1 = [a0,a1,a3,sign]
     #----------------------------------------------------------------------------
     list2  = [""" Theres something cool I want to show you just up ahead"""]
     #---------------

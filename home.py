@@ -983,7 +983,7 @@ ava = last_idle
 ava_start_list = ["400,600","750,630","800,600","800,600","800,600","500,600","500,600","500,600","540,590","880,300","545,600","545,600","545,600","545,600","1100,600","700,600","600,600"]
 text_timer = 0
 map_list = ["maps/map.txt", "maps/map1.5.txt" , "maps/map3.txt", "maps/map3.5.txt", "maps/map3.6.txt"  , "maps/map4.txt",  "maps/4.5.txt","maps/map5.txt", "maps/map5.1.txt","maps/map5.2.txt", "maps/map5.3.txt", "maps/map5.4.txt", "maps/map5.5.txt", "maps/map6.txt","maps/map6.1.txt","maps/map6.2.txt","maps/map6.3.txt"]
-map_index = 0
+map_index = 16
 tile_lister = ["1","1","1","1","1","1","1","2" ,"2" ,"2" ,"2"   ,"2","2","3","3","3","3"]
 x,y = ava_start_list[map_index].split(",")
 x,y = int(x),int(y)
@@ -1066,8 +1066,11 @@ class special_sprite_set:
     talk = pygame.image.load("special_sprite/talk.png")
     talk = pygame.transform.rotozoom(talk,0,2)
     talk_rect = talk.get_rect(center = (300,300))
-    image_list_1 = [tree,cabin,talk]
-    rect_list_1 = [tree_rect,cabin_rect,talk_rect]
+    sign = pygame.image.load("special_sprite/Sign.png")
+    sign = pygame.transform.rotozoom(sign,0,2)
+    sign_rect = sign.get_rect(center = (700,300))
+    image_list_1 = [tree,cabin,talk,sign]
+    rect_list_1 = [tree_rect,cabin_rect,talk_rect,sign_rect]
     #------------------------------------------------------------------------------------------------------------
     talk_0 = talk.get_rect(center = (600,400))
     #-----------------
