@@ -513,8 +513,14 @@ class Combat():
             screen.blit(self.back_surf, self.button11_rect)
 
 
-            self.ult_count = other_text_font.render(f'{self.ult_check}/5', False, (255,255,255))
-            screen.blit(self.ult_count, (958,Screen_H-200))
+            self.ult_count = other_text_font.render(f'ULT {self.ult_check}/5', False, (255,255,255))
+            screen.blit(self.ult_count, (935,Screen_H-200))
+
+            self.Stun = other_text_font.render('Stun', False, (255,255,255))
+            screen.blit(self.Stun, (830,Screen_H-150))
+
+            self.Slash = other_text_font.render('Slash Attack', False, (255,255,255))
+            screen.blit(self.Slash, (1040,Screen_H-150))
           
             #Attack 1
             if self.mouse_rect.colliderect(self.button8_rect):
@@ -596,6 +602,11 @@ class Combat():
             #pygame.draw.rect(screen, self.col14, self.button14_rect)
             screen.blit(self.back_surf, self.button14_rect)
 
+            self.Heal = other_text_font.render('Heal', False, (255,255,255))
+            screen.blit(self.Heal, (880,Screen_H-175))
+
+            self.Buff = other_text_font.render('Buff', False, (255,255,255))
+            screen.blit(self.Buff, (1030,Screen_H-175))
 
             #Attack 1
             if self.mouse_rect.colliderect(self.button12_rect):
@@ -658,7 +669,12 @@ class Combat():
             #pygame.draw.rect(screen, self.col17, self.button17_rect)
             screen.blit(self.back_surf, self.button17_rect)
 
+            self.Debuff = other_text_font.render('Debuff', False, (255,255,255))
+            screen.blit(self.Debuff, (867,Screen_H-175))
 
+            self.Charge_Ult = other_text_font.render('Ult Charge', False, (255,255,255))
+            screen.blit(self.Charge_Ult, (997,Screen_H-175))
+          
             #Debuff
             if self.mouse_rect.colliderect(self.button15_rect):
                 self.col15 = ('Yellow')
