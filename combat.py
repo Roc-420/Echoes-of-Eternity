@@ -532,7 +532,7 @@ class Combat():
                     self.click += 1
                     self.stun = 3
                     self.damage = 0
-                    self.text = 'Ava Blocked the Attack and stunned the Opponent!'
+                    self.text = 'Ava Blocked some damage!'
                     #
                     #
                     #
@@ -573,7 +573,7 @@ class Combat():
                     #
                     #
                     #
-                    self.text = 'Ava used Slice!'
+                    self.text = 'Ava used Slash!'
                     self.eTURN = True
                     self.buttons = 'enemyturn' #THIS SECTION HERE WILL ATTACK THE ENEMY
             else:
@@ -746,9 +746,16 @@ class Combat():
             self.battle = Battle_text.render(self.text, False, (255,255,255))
             screen.blit(self.battle, (750,Screen_H-200))
 
+            if self.stun == 3:
+                self.battle = Battle_text.render('Will be Stunned next turn', False, (255,255,255))
+                screen.blit(self.battle, (750,Screen_H-150))
+            elif self.stun == 2:
+                self.battle = Battle_text.render('Enemy is Stunned!', False, (255,255,255))
+                screen.blit(self.battle, (750,Screen_H-150))
+          
             if self.eTURN:
                 self.count = True
-                self.counter = 60
+                self.counter = 150
                 self.eTURN = False
                 self.semifin = True
             if self.semifin == True and self.count == False:
@@ -790,7 +797,7 @@ class Combat():
 
 
 #enemy name (enemies to fight are listed above in the class), enemyLVL, playerLVL, BG file
-p1 = Combat('Hound', 10, 10, 'scenes/battle_background.jpg')
+p1 = Combat('Brute', 10, 10, 'scenes/battle_background.jpg')
 p1.rect_init()
 
 inpos = False
