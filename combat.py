@@ -377,11 +377,11 @@ class Combat():
 
         
 
-        self.pLVL_HP = other_text_font.render(f'{self.current_HP}/{self.HP}', False, (255,255,255))
+        self.pLVL_HP = other_text_font.render(f'lvl {self.clvl} - {self.current_HP}/{self.HP}', False, (255,255,255))
         screen.blit(self.pLVL_HP, (620,Screen_H-60))###################### text box ######################################################################################
         
-        self.eLVL_HP = other_text_font.render(f'{self.current_eHP}/{self.enemy_HP}', False, (255,255,255))
-        screen.blit(self.eLVL_HP, (575,45))######################################################################################################################
+        self.eLVL_HP = other_text_font.render(f'lvl {self.enemylvl} {self.enemy[0]} - {self.current_eHP}/{self.enemy_HP}', False, (255,255,255))
+        screen.blit(self.eLVL_HP, (450,45))######################################################################################################################
 
         
         
